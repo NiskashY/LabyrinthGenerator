@@ -1,23 +1,29 @@
+#pragma once
+
+#include <iostream>
 #include <vector>
 
 class Matrix { 
-private:
-    std::vector<std::vector<char>> walls;
-    int rows_count_ = 0;
-    int collumns_count_ = 0;
-
 public:
     Matrix() = default;
 
-    explicit Matrix(int, int);
+    explicit Matrix(size_t, size_t);
 
-    void resize(int, int);
+    auto show() -> void;
+    auto resize(size_t, size_t) -> void;
+    auto getRows() const -> size_t;
+    auto getCollumns() const -> size_t;
+    auto setWall(size_t, size_t) -> bool;    // if i or j is larger than grid sizes -> return false, else -> true
+    auto removeWall(size_t, size_t) -> bool;    // if i or j is larger than grid sizes -> return false, else -> true
+    auto isWallExist(size_t, size_t) -> bool;
+    auto assignBoarderVertical() -> void;
+    auto assignBoarderHorizontal() -> void;
 
-    int getRows() const;
-    int getCollumns() const;
+private:    // functions
+    auto isBoardersCorrect(size_t, size_t) const -> bool;
 
-    bool setWall(int, int);
-    bool isWallExist(int, int);
-    void assignBoarderVertical();
-    void assignBoarderHorizontal();
+private:    // variables
+    std::vector<std::vector<char>> walls;
+    size_t rows_count = 0;
+    size_t collumns_count = 0;
 };
