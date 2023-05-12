@@ -1,54 +1,59 @@
 #include "matrix.h"
 
-Matrix::Matrix(int cnt_rows, int cnt_collumns) {
+Matrix::Matrix(size_t cnt_rows, size_t cnt_collumns) {
     this->resize(cnt_rows, cnt_collumns);
 }
 
-void Matrix::resize(int cnt_rows, int cnt_collumns) {
-   rows_count_ = cnt_rows + 1; 
-   collumns_count_ = cnt_collumns + 1;
-   walls.resize(rows_count_, std::vector<char>(collumns_count_));
+auto Matrix::resize(size_t cnt_rows, size_t cnt_collumns) -> void{
+   rows_count = cnt_rows;
+   collumns_count = cnt_collumns;
+   walls.resize(rows_count, std::vector<char>(collumns_count));
 }
 
-int Matrix::getRows() const {
-   return walls.size();
+auto Matrix::getRows() const -> size_t {
+   return rows_count;
 }
 
-int Matrix::getCollumns() const {
-    return (rows_count_ ? collumns_count_ : 0);
-}  
+auto Matrix::getCollumns() const -> size_t {
+    return collumns_count;
+}
 
-bool Matrix::setWall(int x, int y) {
-    if (x < 0 || x >= rows_count_ ||
-        y < 0 || y >= collumns_count_ || walls[x][y]) {
-        return false;
+auto Matrix::setWall(size_t x, size_t y) -> bool {
+    return isBoardersCorrect(x, y) && (walls[x][y] = true);
+}
+
+auto Matrix::removeWall(size_t x, size_t y) -> bool {
+    return isBoardersCorrect(x, y) && !(walls[x][y] = false);
+}
+
+
+auto Matrix::isWallExist(size_t x, size_t y) -> bool {
+    return isBoardersCorrect(x, y) && walls[x][y];
+}
+
+auto Matrix::assignBoarderHorizontal() -> void {
+    for (auto& cell : walls.back()) { // walls.back() -> last row
+        cell = true;
     }
-    return walls[x][y] = true;
 }
 
-bool Matrix::isWallExist(int x, int y) {
-    if (x < 0 || x >= rows_count_ || 
-        y < 0 || y >= collumns_count_) {
-        return false;
+auto Matrix::assignBoarderVertical() -> void {
+    const int j = (int)collumns_count - 1;
+    for (int i = 0; i < rows_count; ++i) {
+        walls[i][j] = true;
     }
-    return walls[x][y];
 }
 
-void Matrix::assignBoarderHorizontal() {
-    std::vector<int> rows_start = {0, rows_count_ - 1};
-    for (auto& position : rows_start) {
-        for (auto& cell : walls[position]) {
-            cell = 1;
+auto Matrix::isBoardersCorrect(size_t x, size_t y) const -> bool {
+    return x < rows_count && y < collumns_count;
+}
+
+
+auto Matrix::show() -> void {
+    for (auto& row : walls) {
+        for (auto& item : row) {
+            std::cout << char(item + '0') << ' ';
         }
+        std::cout << std::endl;
     }
 }
-
-void Matrix::assignBoarderVertical() {
-    std::vector<int> coll_start = {0, collumns_count_ - 1};
-    for (auto& position : coll_start) {
-        for (int i = 0; i < rows_count_; ++i) {
-            walls[i][position] = 1;
-        }
-    }
-}
-

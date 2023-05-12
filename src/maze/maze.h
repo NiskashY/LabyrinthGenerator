@@ -1,33 +1,36 @@
-#include <iostream>
+#pragma once
+
+#include <cstddef>
 #include <random>
-#include <map>
-#include <functional>
+#include <unordered_map>
 
 #include "matrix.h"
 
 class MazeGenerator {
 public: 
-    explicit MazeGenerator(int, int);
-    void generate();
+    explicit MazeGenerator(size_t, size_t);
 
+    auto generate()                 -> void;
+    auto show()                     -> void;
 private: // functions
-    void generateRow();
-    bool randomChoice();
-    void fillEmptyCells();
-    void assignUniqueSets();
-    void createVerticalWalls(int);
-    void createHorizontalWalls(int);
-    void prepareNewLine();
-    void mergeSets(int, int);
-    int GetRoot(int);
+    auto generateRow()              -> void;
+    auto fillEmptyCells()           -> void;
+    auto assignUniqueSets()         -> void;
+    auto createVerticalWalls(int)   -> void;
+    auto createHorizontalWalls(int) -> void;
+    auto prepareNewLine(int)           -> void;
+    auto mergeSets(int, int)        -> void;
+    auto getRoot(int)               -> int;
+    auto random(int, int)           -> int;
 
 private: // variables
-    Matrix vertical_walls,   /* vertical   - left boarder of cell */
-           horizontal_walls; /* horizontal - upper bouardre of cell */
+    Matrix vertical_walls;   /* vertical   - right boarder of cell */
+    Matrix horizontal_walls; /* horizontal - bottom boarder of cell */
 
-    std::map<int, int> parent;
-    std::vector<int> line;
-    const int kEmptyCell = 0;
-    int rows = 0, collumns = 0;
+    std::unordered_map<int, int> parent; // TODO: move this to local variable
+    std::vector<int> line;     // TODO: move this to local varibale
+
+    static constexpr int kEmptyCell = 0;
+    size_t rows = 0, collumns = 0;
     int set_counter = 1;
 };
