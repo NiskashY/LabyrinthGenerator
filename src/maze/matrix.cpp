@@ -50,7 +50,7 @@ auto Matrix::isBordersCorrect(size_t x, size_t y) const -> bool {
 }
 
 
-auto Matrix::show() -> void {
+auto Matrix::show() const -> void {
     for (auto& row : walls) {
         for (auto& item : row) {
             std::cout << char(item + '0') << ' ';

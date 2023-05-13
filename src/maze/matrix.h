@@ -9,7 +9,7 @@ public:
 
     explicit Matrix(size_t, size_t);
 
-    auto show() -> void;
+    auto show() const -> void;
     auto resize(size_t, size_t) -> void;
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
