@@ -1,30 +1,31 @@
 #include "mainwindow.h"
-#include <QtWidgets>
-#include <QGridLayout>
-#include <QPixmap>
 
 MainWidget::MainWidget(QWidget *parent) :QWidget(parent)
 {
     button = std::make_shared<QPushButton>(tr("Push Me!"));
     textBrowser = std::make_shared<QTextBrowser>();
 
-    auto v_layout_main = new QVBoxLayout(this);
+    setLayout(createMainLayout());
+    setWindowTitle(tr("Connecting buttons to processes.."));
+}
+
+auto MainWidget::createMainLayout() const -> QVBoxLayout* {
+    auto v_layout_main = new QVBoxLayout();
     auto button_generate = new QPushButton("Generate");
+    auto g_layout_labyrinth = new QGridLayout();
+    g_layout_labyrinth->setSpacing(0);
 
     connect(button_generate, &QPushButton::clicked,
             this, &MainWidget::setupLabyrinthUi);
 
-
-    v_layout_main->addLayout(new QGridLayout());
+    v_layout_main->addLayout(g_layout_labyrinth);
     v_layout_main->addStretch(1);
     v_layout_main->addLayout(createOpenSaveLayout());
     v_layout_main->addWidget(button_generate);
     v_layout_main->addLayout(createParametersLayout());
 
-    setLayout(v_layout_main);
-    setWindowTitle(tr("Connecting buttons to processes.."));
+    return v_layout_main;
 }
-
 
 auto MainWidget::createParametersLayout() const -> QLayout* {
     auto params_layout = new QHBoxLayout();
@@ -68,7 +69,7 @@ auto MainWidget::setupLabyrinthUi() -> void {
             frame->setStyleSheet(createCellQss(bottom, i, j, right) + "background-color: #27074B;");
             frame->setFixedHeight(100); // TODO:     get current window height -> set cell parameters
             frame->setFixedWidth(100);  // TODO:     get current window width  -> set cell parameters
-            
+
             g_layout_labyrinth->addWidget(frame, i, j);
         }
     }
