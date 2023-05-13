@@ -1,0 +1,33 @@
+QLabel[border = "right"] {
+    border-right: 2px solid white;
+}
+
+QLabel[border = "left"] {
+    border-left: 2px solid white;
+}
+
+QLabel[border = "top"] {
+    border-top: 2px solid white;
+}
+
+QLabel[border = "bottom"] {
+    border-bottom: 2px solid white;
+}
+
+
+.maze-border-right {
+    border-right: 2px solid white;
+}
+
+.maze-border-left {
+    border-left: 2px solid white;
+}
+
+.maze-border-top {
+    border-top: 2px solid white;
+}
+
+.maze-border-bottom {
+    border-bottom: 2px solid white;
+}
+
