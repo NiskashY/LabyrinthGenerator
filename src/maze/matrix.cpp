@@ -1,51 +1,52 @@
 #include "matrix.h"
 
-Matrix::Matrix(size_t cnt_rows, size_t cnt_collumns) {
-    this->resize(cnt_rows, cnt_collumns);
+Matrix::Matrix(size_t cnt_rows, size_t cnt_columns) {
+    this->resize(cnt_rows, cnt_columns);
 }
 
-auto Matrix::resize(size_t cnt_rows, size_t cnt_collumns) -> void{
+auto Matrix::resize(size_t cnt_rows, size_t cnt_columns) -> void{
    rows_count = cnt_rows;
-   collumns_count = cnt_collumns;
-   walls.resize(rows_count, std::vector<char>(collumns_count));
+   columns_count = cnt_columns;
+   walls.clear();
+   walls.resize(rows_count, std::vector<char>(columns_count));
 }
 
 auto Matrix::getRows() const -> size_t {
    return rows_count;
 }
 
-auto Matrix::getCollumns() const -> size_t {
-    return collumns_count;
+auto Matrix::getColumns() const -> size_t {
+    return columns_count;
 }
 
 auto Matrix::setWall(size_t x, size_t y) -> bool {
-    return isBoardersCorrect(x, y) && (walls[x][y] = true);
+    return isBordersCorrect(x, y) && (walls[x][y] = true);
 }
 
 auto Matrix::removeWall(size_t x, size_t y) -> bool {
-    return isBoardersCorrect(x, y) && !(walls[x][y] = false);
+    return isBordersCorrect(x, y) && !(walls[x][y] = false);
 }
 
 
 auto Matrix::isWallExist(size_t x, size_t y) -> bool {
-    return isBoardersCorrect(x, y) && walls[x][y];
+    return isBordersCorrect(x, y) && walls[x][y];
 }
 
-auto Matrix::assignBoarderHorizontal() -> void {
+auto Matrix::assignBorderHorizontal() -> void {
     for (auto& cell : walls.back()) { // walls.back() -> last row
         cell = true;
     }
 }
 
-auto Matrix::assignBoarderVertical() -> void {
-    const int j = (int)collumns_count - 1;
+auto Matrix::assignBorderVertical() -> void {
+    const int j = (int)columns_count - 1;
     for (int i = 0; i < rows_count; ++i) {
         walls[i][j] = true;
     }
 }
 
-auto Matrix::isBoardersCorrect(size_t x, size_t y) const -> bool {
-    return x < rows_count && y < collumns_count;
+auto Matrix::isBordersCorrect(size_t x, size_t y) const -> bool {
+    return x < rows_count && y < columns_count;
 }
 
 
