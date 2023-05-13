@@ -9,6 +9,7 @@
 #include <QPixmap>
 
 #include "../maze/maze.h"
+#define STR_NAME(x) #x
 
 class MainWidget : public QWidget {
     Q_OBJECT
@@ -17,16 +18,17 @@ public:
     explicit MainWidget(QWidget *parent = nullptr);
     ~MainWidget() override = default;
 
+private:  // functions
     auto createMainLayout() const -> QVBoxLayout*;
     auto createParametersLayout() const -> QLayout*;
     auto createOpenSaveLayout() const -> QLayout*;
+    auto createMazeLayout() const -> QLayout*;
+    auto createGenerateButton() const ->QPushButton*;
     auto setupLabyrinthUi() -> void;
-
-private:
     auto createCellQss(bool, int, int, bool) const -> QString;  // bottom, top, left, right
 
-    std::shared_ptr<QPushButton> button;
-    std::shared_ptr<QTextBrowser> textBrowser;
+    auto hide(QGridLayout *gl, size_t row, size_t col) const -> void;
 
+private:
     MazeGenerator maze;
 };

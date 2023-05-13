@@ -15,7 +15,12 @@ auto MazeGenerator::generate() -> void {
     addLastRow();
 }
 
-auto MazeGenerator::show() -> void {
+auto MazeGenerator::create(size_t rows, size_t columns) -> void {
+    this->resize(rows, columns);
+    this->generate();
+}
+
+auto MazeGenerator::show() const -> void {
     std::cout << "\nvertical: " << std::endl;
     vertical_walls.show();
     std::cout << "\nhorizontal: " << std::endl;

@@ -13,8 +13,9 @@ public:
 
     explicit MazeGenerator(size_t, size_t);
 
-    auto generate()                 -> void;
-    auto show()                     -> void;
+    auto generate() -> void;
+    auto show() const -> void;
+    auto create(size_t, size_t) -> void;
     auto resize(size_t, size_t) -> void;
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
