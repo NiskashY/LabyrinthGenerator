@@ -1,5 +1,12 @@
 #include "maze.h"
 
+auto random(int l, int r) -> int {  // [l, r]
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(l, r);
+    return distrib(gen);
+}
+
 MazeGenerator::MazeGenerator(size_t rows_, size_t columns_) {
     this->resize(rows_, columns_);
 }
@@ -27,16 +34,15 @@ auto MazeGenerator::show() const -> void {
     horizontal_walls.show();
 }
 
-auto MazeGenerator::resize(size_t rows_, size_t columns_) -> void {
+auto MazeGenerator::resize(size_t rows_, size_t columns_, int val) -> void {
     rows = rows_; columns = columns_;
 
-    vertical_walls.resize(rows, columns);
-    vertical_walls.assignBorderVertical();
+    vertical_walls.resize(rows, columns, val);
+    vertical_walls.assignBorder();
 
-    horizontal_walls.resize(rows, columns);
-    horizontal_walls.assignBorderHorizontal();
+    horizontal_walls.resize(rows, columns, val);
+    horizontal_walls.assignBorder();
 }
-
 
 auto MazeGenerator::getRows() const -> size_t {
     return rows;
@@ -44,12 +50,6 @@ auto MazeGenerator::getRows() const -> size_t {
 
 auto MazeGenerator::getColumns() const -> size_t {
     return columns;
-}
-auto MazeGenerator::random(int l, int r) -> int {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(l, r);
-    return distrib(gen);
 }
 
 auto MazeGenerator::getRoot(int v) -> int {
@@ -64,6 +64,7 @@ auto MazeGenerator::mergeSets(int x, int y) -> void {
 }
 
 auto MazeGenerator::fillEmptyCells() -> void {
+    this->resize(rows, columns);
     set_counter = 1;
     line.assign(columns, kEmptyCell);
     parent.clear();

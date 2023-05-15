@@ -1,20 +1,20 @@
-#include <QtWidgets>
-#include <QFile>
-
 #include "ui/mainwindow.h"
 
+#include <QApplication>
+#include <QFile>
+
 auto getStyleSheet() -> QString {
-    QFile file("/home/mint/GitRepos/LabyrinthGenerator/images/stylesheet.qss");
+    QFile file(":/style/stylesheet.qss");
     file.open(QFile::ReadOnly);
     return QLatin1String(file.readAll());
 }
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    QApplication a(argc, argv);
+    a.setStyleSheet(getStyleSheet());
 
-    app.setStyleSheet(getStyleSheet());
-    MainWidget w;
+    MainWindow w;
     w.show();
 
-    return app.exec();
+    return a.exec();
 }
