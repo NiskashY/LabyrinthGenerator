@@ -1,34 +1,29 @@
 #pragma once
 
-#include <memory>
-#include <QWidget>
-#include <QPushButton>
-#include <QTextBrowser>
-#include <QtWidgets>
-#include <QGridLayout>
-#include <QPixmap>
+#include <QMainWindow>
 
+#include "maze_ui.h"
 #include "../maze/maze.h"
-#define STR_NAME(x) #x
 
-class MainWidget : public QWidget {
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:
-    explicit MainWidget(QWidget *parent = nullptr);
-    ~MainWidget() override = default;
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
-private:  // functions
-    auto createMainLayout() const -> QVBoxLayout*;
-    auto createParametersLayout() const -> QLayout*;
-    auto createOpenSaveLayout() const -> QLayout*;
-    auto createMazeLayout() const -> QLayout*;
-    auto createGenerateButton() const ->QPushButton*;
-    auto setupLabyrinthUi() -> void;
-    auto createCellQss(bool, int, int, bool) const -> QString;  // bottom, top, left, right
-
-    auto hide(QGridLayout *gl, size_t row, size_t col) const -> void;
+public slots:
+    void on_pushButton_clicked();
 
 private:
+    MazeUi mazeUi;
     MazeGenerator maze;
+
+    Ui::MainWindow *ui;
 };
