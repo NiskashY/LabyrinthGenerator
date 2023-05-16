@@ -12,14 +12,8 @@ auto MazeUi::create(const MazeGenerator& maze, Ui::MainWindow* ui) -> void {
 }
 
 auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> void {
-    int rows = maze.getRows();
-    int columns = maze.getColumns();
-
-    auto wHeight = drawable_label->rect().height();
-    auto wWidth  = drawable_label->rect().width();
-
-    double cellHeight = (double)wHeight / rows;
-    double cellWidth  = (double)wWidth / columns;
+    const double cellHeight = (double)drawable_label->rect().height() / maze.getRows();
+    const double cellWidth  = (double)drawable_label->rect().width() / maze.getColumns();
 
     auto getCell = [&](int i, int j) {
         return std::tuple{
@@ -31,10 +25,11 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
     QPixmap pix(drawable_label->rect().size());
     pix.fill(Qt::black);
 
-    for (size_t i = 0; i < rows; ++i) {
-        for (size_t j = 0; j < columns; ++j) {
-            QPainter painter(&pix);
-            painter.setPen(QPen(Qt::white, 2));
+    QPainter painter(&pix);
+    painter.setPen(QPen(Qt::white, 2));
+
+    for (size_t i = 0; i < maze.getRows(); ++i) {
+        for (size_t j = 0; j < maze.getColumns(); ++j) {
             auto [x0, y0, x1, y1] = getCell(i, j);
             auto [isHorizontalWall, isVerticalWall] = maze.get(i, j);   // v -> h, h -> v; because of coordinate plane
             if (isVerticalWall) {
