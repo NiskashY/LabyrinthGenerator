@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(src VERSION 0.1 LANGUAGES CXX)
+project(LabyrinthGenerator VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -13,47 +13,47 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
+        src/main.cpp
 
-        ui/mainwindow.cpp
-        ui/mainwindow.ui
-        ui/mainwindow.h
-        ui/maze_ui.cpp
-        ui/maze_ui.h
+        src/ui/mainwindow.cpp
+        src/ui/mainwindow.ui
+        src/ui/mainwindow.h
+        src/ui/maze_ui.cpp
+        src/ui/maze_ui.h
 
-        maze/horizontal_matrix.cpp
-        maze/matrix.cpp
-        maze/vertical_matrix.cpp
-        maze/maze.cpp
-        resourses.qrc
+        src/maze/horizontal_matrix.cpp
+        src/maze/matrix.cpp
+        src/maze/vertical_matrix.cpp
+        src/maze/maze.cpp
+        src/resourses.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(src
+    qt_add_executable(LabyrinthGenerator
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET src APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET LabyrinthGenerator APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(src SHARED
+        add_library(LabyrinthGenerator SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(src
+        add_executable(LabyrinthGenerator
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(src PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(LabyrinthGenerator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(src PROPERTIES
+set_target_properties(LabyrinthGenerator PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -61,10 +61,10 @@ set_target_properties(src PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS src
+install(TARGETS LabyrinthGenerator
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(src)
+    qt_finalize_executable(LabyrinthGenerator)
 endif()

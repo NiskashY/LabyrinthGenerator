@@ -16,11 +16,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked() {
+void MainWindow::on_generateButton_clicked() {
     if (!ui->inputHeight->text().isEmpty() &&
         !ui->inputWidth->text().isEmpty()) {
-        maze.create(ui->inputHeight->text().toInt(),
-                    ui->inputWidth->text().toInt());
+        maze.create(ui->inputHeight->text().toInt(), // TODO:
+                    ui->inputWidth->text().toInt()); // TODO:
     } else {
         maze.generate();
     }

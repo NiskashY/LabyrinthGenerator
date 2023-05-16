@@ -36,7 +36,7 @@
       <item>
        <layout class="QVBoxLayout" name="openSaveLayout">
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="openButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -55,7 +55,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="saveButton">
           <property name="text">
            <string>SAVE</string>
           </property>
@@ -88,7 +88,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="generateButton">
           <property name="text">
            <string>GENERATE</string>
           </property>

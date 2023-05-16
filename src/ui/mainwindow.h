@@ -19,7 +19,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void on_pushButton_clicked();
+    void on_generateButton_clicked();
 
 private:
     MazeUi mazeUi;
