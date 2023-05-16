@@ -26,6 +26,12 @@ public:
                 horizontal_walls.isWallExist(r, c)};
     }
 
+    auto getVData() const -> std::vector<std::vector<int>>;
+    auto setVData(const std::vector<std::vector<int>>&) -> void;
+
+    auto getHData() const -> std::vector<std::vector<int>>;
+    auto setHData(const std::vector<std::vector<int>>&) -> void;
+
 private: // functions
     auto addLastRow()               -> void;
     auto fillEmptyCells()           -> void;

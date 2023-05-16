@@ -1,6 +1,10 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QFileDialog>
+
+#include <QApplication>
+#include <QStringList>
 
 #include "maze_ui.h"
 #include "../maze/maze.h"
@@ -20,6 +24,7 @@ public:
 
 public slots:
     void on_generateButton_clicked();
+    void on_openButton_clicked();
 
 private:
     MazeUi mazeUi;

@@ -33,10 +33,10 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
             auto [x0, y0, x1, y1] = getCell(i, j);
             auto [isHorizontalWall, isVerticalWall] = maze.get(i, j);   // v -> h, h -> v; because of coordinate plane
             if (isVerticalWall) {
-                painter.drawLine(x0, y1, x1, y1);
+                painter.drawLine(x0, y1, x1, y1); // segfault ? mazeUi.open
             }
             if (isHorizontalWall) {
-                painter.drawLine(x1, y0, x1, y1);
+                painter.drawLine(x1, y0, x1, y1); // segfault ? mazeUi.open
             }
         }
     }
@@ -50,4 +50,24 @@ void MazeUi::clear(Ui::MainWindow* ui) {
         delete child->widget(); // delete the widget
         delete child;   // delete the layout item
     }
+}
+
+auto MazeUi::getFileNameFromPath(QString file_path) -> QString {
+    QString resultFileName;
+
+    for (int i = (int)file_path.size() - 1; i >= 0 && file_path[i] != '/'; --i) {
+        resultFileName += file_path[i];
+    }
+
+    std::reverse(resultFileName.begin(), resultFileName.end());
+    return resultFileName;
+}
+
+auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
+    QString file_name = getFileNameFromPath(file_path);
+    QFile::copy(file_path, QApplication::applicationDirPath() + "/saved-mazes/" + file_name);
+    FileHandler fhandler(file_path);
+    auto [v_data, h_data] = fhandler.read();
+    maze.setVData(v_data);
+    maze.setHData(h_data);
 }
