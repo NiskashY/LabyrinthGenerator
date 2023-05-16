@@ -52,6 +52,22 @@ auto MazeGenerator::getColumns() const -> size_t {
     return columns;
 }
 
+auto MazeGenerator::getVData() const -> std::vector<std::vector<int>> {
+    return vertical_walls.getData();
+}
+
+auto MazeGenerator::getHData() const -> std::vector<std::vector<int>> {
+    return horizontal_walls.getData();
+}
+
+auto MazeGenerator::setVData(const std::vector<std::vector<int>>& data) -> void {
+    vertical_walls.setData(data);
+}
+
+auto MazeGenerator::setHData(const std::vector<std::vector<int>>& data) -> void {
+    horizontal_walls.setData(data);
+}
+
 auto MazeGenerator::getRoot(int v) -> int {
     if (parent.contains(v) && parent[v] != v) {
         return parent[v] = getRoot(parent[v]);

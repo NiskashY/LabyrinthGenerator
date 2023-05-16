@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         src/ui/mainwindow.h
         src/ui/maze_ui.cpp
         src/ui/maze_ui.h
+        src/ui/file_handler.h
+        src/ui/file_handler.cpp
 
         src/maze/horizontal_matrix.cpp
         src/maze/matrix.cpp
