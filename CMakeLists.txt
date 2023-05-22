@@ -23,8 +23,8 @@ set(PROJECT_SOURCES
         src/ui/file_handler.h
         src/ui/file_handler.cpp
 
-        src/maze/horizontal_matrix.cpp
         src/maze/matrix.cpp
+        src/maze/horizontal_matrix.cpp
         src/maze/vertical_matrix.cpp
         src/maze/maze.cpp
         src/resourses.qrc

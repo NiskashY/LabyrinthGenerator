@@ -1,41 +1,43 @@
 #pragma once
 
+#include <QApplication>
 #include <QString>
+
+#include <iomanip>
+#include <ctime>
+#include <iostream>
 #include <fstream>
 #include <vector>
 
-class FileHandler {
+namespace file {
+
+const QString kSavedMazesDirPath = QApplication::applicationDirPath() + "/saved-mazes/";
+
+class Handler {
 public:
-    explicit FileHandler(const std::string& fileName) : fileStream(fileName) {
+    template <class T> using v = std::vector<T>;
+    explicit Handler(const std::string& fileName) : fileStream(fileName) {
     }
 
-    explicit FileHandler(const QString& fileName) : fileStream(fileName.toStdString()) {
+    explicit Handler(const QString& fileName) : fileStream(fileName.toStdString()) {
     }
 
 
-    auto read() -> std::pair<
-            std::vector<std::vector<int>>,
-            std::vector<std::vector<int>>>;
+    auto read() -> std::pair<v<v<int>>, v<v<int>>>;
 
-    auto write(auto& v_data, auto& h_data) -> void;
+    auto write(const std::vector<std::vector<int>>& v_data,
+               const std::vector<std::vector<int>>& h_data) -> void;
 
 private:
-    auto readVec(auto& vec) -> void {
-        for (auto& row : vec) {
-            for (auto& cell : row) {
-                fileStream >> cell;
-            }
-        }
-    }
+    auto readVec(auto& vec) -> void;
 
-    auto writeVec(const auto& vec) -> void {
-        for (auto& row : vec) {
-            for (auto& cell : row) {
-                fileStream << cell << ' ';
-            }
-            fileStream << '\n';
-        }
-    }
+    auto writeVec(const auto& vec) -> void;
 
     std::fstream fileStream;
+
 };
+
+auto createFileName(QString = "") -> QString;
+auto getFileNameFromPath(QString) -> QString;
+}; // end namespace file
+

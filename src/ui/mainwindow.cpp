@@ -40,7 +40,16 @@ void MainWindow::on_openButton_clicked() {
         for (const auto& file_path : selectedFiles) {
             mazeUi.open(file_path, maze);
             mazeUi.clear(ui);
-            mazeUi.create(maze, ui);    // TODO: bug - cant create mazeUi -> segfault
+            mazeUi.create(maze, ui);
+            ui->inputHeight->setText(QString::number(maze.getRows()));
+            ui->inputWidth->setText(QString::number(maze.getColumns()));
         }
     }
 }
+
+void MainWindow::on_saveButton_clicked() {
+    std::cout << "ee" << std::endl;
+    mazeUi.save(maze);
+}
+
+
