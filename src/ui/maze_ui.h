@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../maze/maze.h"
-#include "file_handler.h"
 
 #include <QMainWindow>
 #include <QRect>
@@ -23,8 +22,5 @@ public:
     auto clear(Ui::MainWindow*) -> void;
 
     auto open(QString, MazeGenerator&) -> void;
-    auto save() -> void;
-
-private:
-    auto getFileNameFromPath(QString) -> QString;
+    auto save(const MazeGenerator&) -> void;
 };

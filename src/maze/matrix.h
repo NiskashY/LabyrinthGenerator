@@ -15,6 +15,7 @@ public:
 
     auto setData(std::vector<std::vector<int>>) -> void;
     auto getData() const -> std::vector<std::vector<int>>;
+    auto getRefData() const -> const std::vector<std::vector<int>>&;
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
 

@@ -13,9 +13,15 @@ auto Matrix::resize(size_t cnt_rows, size_t cnt_columns, int val) -> void{
 
 void Matrix::setData(std::vector<std::vector<int>> data) {
    std::swap(walls, data);
+   rows_count = walls.size();
+   columns_count = walls.front().size();
 }
 
 auto Matrix::getData() const -> std::vector<std::vector<int>> {
+   return walls;
+}
+
+auto Matrix::getRefData() const -> const std::vector<std::vector<int>>& {
    return walls;
 }
 

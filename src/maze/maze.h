@@ -26,10 +26,13 @@ public:
                 horizontal_walls.isWallExist(r, c)};
     }
 
-    auto getVData() const -> std::vector<std::vector<int>>;
-    auto setVData(const std::vector<std::vector<int>>&) -> void;
+    auto getRefVData() const -> const std::vector<std::vector<int>>&;
+    auto getRefHData() const -> const std::vector<std::vector<int>>&;
 
+    auto getVData() const -> std::vector<std::vector<int>>;
     auto getHData() const -> std::vector<std::vector<int>>;
+
+    auto setVData(const std::vector<std::vector<int>>&) -> void;
     auto setHData(const std::vector<std::vector<int>>&) -> void;
 
 private: // functions

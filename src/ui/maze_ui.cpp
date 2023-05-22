@@ -1,4 +1,5 @@
 #include "maze_ui.h"
+#include "file_handler.h"
 #include "ui/ui_mainwindow.h"
 
 auto MazeUi::create(const MazeGenerator& maze, Ui::MainWindow* ui) -> void {
@@ -52,22 +53,18 @@ void MazeUi::clear(Ui::MainWindow* ui) {
     }
 }
 
-auto MazeUi::getFileNameFromPath(QString file_path) -> QString {
-    QString resultFileName;
-
-    for (int i = (int)file_path.size() - 1; i >= 0 && file_path[i] != '/'; --i) {
-        resultFileName += file_path[i];
-    }
-
-    std::reverse(resultFileName.begin(), resultFileName.end());
-    return resultFileName;
-}
-
 auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
-    QString file_name = getFileNameFromPath(file_path);
-    QFile::copy(file_path, QApplication::applicationDirPath() + "/saved-mazes/" + file_name);
-    FileHandler fhandler(file_path);
+    auto file_name = file::getFileNameFromPath(file_path);
+    QFile::copy(file_path, file::kSavedMazesDirPath + file_name);
+    file::Handler fhandler(file_path);
     auto [v_data, h_data] = fhandler.read();
     maze.setVData(v_data);
     maze.setHData(h_data);
+}
+
+auto MazeUi::save(const MazeGenerator& maze) -> void {
+    auto file_name = file::createFileName();
+    auto file_path = file::kSavedMazesDirPath + file_name;
+    file::Handler fhandler(file_path);
+    fhandler.write(maze.getRefVData(), maze.getRefHData());
 }
