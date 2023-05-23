@@ -1,14 +1,19 @@
 #include "mainwindow.h"
 #include "./ui/ui_mainwindow.h"
 
+#include <QValidator>
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow), mazeUi(ui)
 {
     ui->setupUi(this);
+    ui->inputHeight->setValidator(new QIntValidator(0, 100, this));
+    ui->inputWidth->setValidator(new QIntValidator(0, 100, this));
     setWindowTitle("Maze Generator");
     maze.create(10, 10);
-    mazeUi.create(maze, ui);
+    mazeUi.create(maze);
 }
 
 MainWindow::~MainWindow()
@@ -19,13 +24,12 @@ MainWindow::~MainWindow()
 void MainWindow::on_generateButton_clicked() {
     if (!ui->inputHeight->text().isEmpty() &&
         !ui->inputWidth->text().isEmpty()) {
-        maze.create(ui->inputHeight->text().toInt(), // TODO:
-                    ui->inputWidth->text().toInt()); // TODO:
+        maze.create(ui->inputHeight->text().toInt(),
+                    ui->inputWidth->text().toInt());
     } else {
         maze.generate();
     }
-    mazeUi.clear(ui);
-    mazeUi.create(maze, ui);
+    mazeUi.create(maze);
 }
 
 void MainWindow::on_openButton_clicked() {
@@ -39,8 +43,7 @@ void MainWindow::on_openButton_clicked() {
         QStringList selectedFiles = dirWindow.selectedFiles();
         for (const auto& file_path : selectedFiles) {
             mazeUi.open(file_path, maze);
-            mazeUi.clear(ui);
-            mazeUi.create(maze, ui);
+            mazeUi.create(maze);
             ui->inputHeight->setText(QString::number(maze.getRows()));
             ui->inputWidth->setText(QString::number(maze.getColumns()));
         }
@@ -48,7 +51,9 @@ void MainWindow::on_openButton_clicked() {
 }
 
 void MainWindow::on_saveButton_clicked() {
-    mazeUi.save(maze);
+    auto pix = this->findChild<QLabel*>("drawable_label")->pixmap();
+    auto savedDirPath = mazeUi.save(maze, pix);
+    QMessageBox msgBox;
+    msgBox.setText("Saved into directory:" + savedDirPath);
+    msgBox.exec();
 }
-
-

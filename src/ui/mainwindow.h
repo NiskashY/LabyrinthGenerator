@@ -4,7 +4,6 @@
 #include <QFileDialog>
 
 #include <QApplication>
-#include <QStringList>
 
 #include "maze_ui.h"
 #include "../maze/maze.h"
@@ -28,8 +27,7 @@ public slots:
     void on_saveButton_clicked();
 
 private:
+    Ui::MainWindow *ui;
     MazeUi mazeUi;
     MazeGenerator maze;
-
-    Ui::MainWindow *ui;
 };
