@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QApplication>
 #include <QString>
 
 #include <iomanip>
@@ -17,15 +16,11 @@ public:
     explicit Handler(const QString&);
 
     auto read() -> std::pair<v<v<int>>, v<v<int>>>;
-
-    auto write(const std::vector<std::vector<int>>&,
-               const std::vector<std::vector<int>>&) -> void;
+    auto write(const v<v<int>>&, const v<v<int>>&) -> void;
 
 private: // funcitons
     auto createFile() -> void;
-
     auto readVec(auto&) -> void;
-
     auto writeVec(const auto&) -> void;
 
 private: // vars

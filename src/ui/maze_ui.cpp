@@ -2,11 +2,18 @@
 #include "file_handler.h"
 #include "ui/ui_mainwindow.h"
 
+#include <QDir>
+
 namespace file {
 extern QString kSavedMazesDirPath;
 };
 
-auto MazeUi::create(const MazeGenerator& maze, Ui::MainWindow* ui) -> void {
+MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {
+
+}
+
+auto MazeUi::create(const MazeGenerator& maze) -> void {
+    this->clear();
     auto field = new QLabel();
     field->setObjectName("drawable_label");
     field->setProperty("field", "maze");
@@ -36,12 +43,12 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
     for (size_t i = 0; i < maze.getRows(); ++i) {
         for (size_t j = 0; j < maze.getColumns(); ++j) {
             auto [x0, y0, x1, y1] = getCell(i, j);
-            auto [isHorizontalWall, isVerticalWall] = maze.get(i, j);   // v -> h, h -> v; because of coordinate plane
+            auto [isHorizontalWall, isVerticalWall] = maze.get(i, j);   // v -> h, h -> v;
             if (isVerticalWall) {
-                painter.drawLine(x0, y1, x1, y1); // segfault ? mazeUi.open
+                painter.drawLine(x0, y1, x1, y1);
             }
             if (isHorizontalWall) {
-                painter.drawLine(x1, y0, x1, y1); // segfault ? mazeUi.open
+                painter.drawLine(x1, y0, x1, y1);
             }
         }
     }
@@ -49,7 +56,7 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
     drawable_label->setPixmap(pix);
 }
 
-void MazeUi::clear(Ui::MainWindow* ui) {
+void MazeUi::clear() {
     QLayoutItem *child;
     while ((child = ui->mazeLayout->takeAt(0)) != nullptr) {
         delete child->widget(); // delete the widget
@@ -66,13 +73,26 @@ auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
     maze.setHData(h_data);
 }
 
-#include <QFile>
-#include <cassert>
+auto MazeUi::save(const MazeGenerator& maze, const QPixmap& pix) -> QString {
+    auto name = file::createFileName();
 
-auto MazeUi::save(const MazeGenerator& maze) -> void {
-    auto file_name = file::createFileName();
-    auto file_path = file::kSavedMazesDirPath + file_name;
+    auto dir_path = file::kSavedMazesDirPath + name + "/";
+    QDir qdir;
+    qdir.mkdir(dir_path);
 
+    saveMazeImage(pix, dir_path + name + ".png");
+    saveMazeData(maze, dir_path + name + ".txt");
+
+    return dir_path;
+}
+
+auto MazeUi::saveMazeData(const MazeGenerator& maze, QString file_path) -> void {
     file::Handler fhandler(file_path);
     fhandler.write(maze.getRefVData(), maze.getRefHData());
+}
+
+auto MazeUi::saveMazeImage(const QPixmap& pix, QString file_path) -> void {
+    QFile file(file_path);
+    file.open(QIODevice::WriteOnly);
+    pix.save(&file, "PNG");
 }

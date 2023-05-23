@@ -15,12 +15,17 @@ QT_END_NAMESPACE
 
 class MazeUi {
 public:
-    MazeUi() = default;
+    MazeUi(Ui::MainWindow* ui_);
 
-    auto create(const MazeGenerator&, Ui::MainWindow*) -> void;
+    auto create(const MazeGenerator&) -> void;
     auto draw(const MazeGenerator&, QLabel*) const -> void;
-    auto clear(Ui::MainWindow*) -> void;
+    auto clear() -> void;
 
     auto open(QString, MazeGenerator&) -> void;
-    auto save(const MazeGenerator&) -> void;
+    auto save(const MazeGenerator&, const QPixmap&) -> QString;
+
+private:
+    Ui::MainWindow* ui = nullptr;
+    auto saveMazeData(const MazeGenerator&, QString) -> void;
+    auto saveMazeImage(const QPixmap&, QString) -> void;
 };
