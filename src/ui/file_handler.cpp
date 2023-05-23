@@ -1,13 +1,19 @@
 #include "file_handler.h"
 
+file::Handler::Handler(const QString& fileName_) :
+    fileName(fileName_.toStdString()), fileStream(fileName) {
+    if (!fileStream) {
+        this->createFile();
+    }
+}
+
 auto getTimeStr() -> std::string {
     auto current_time = std::time(nullptr);
     auto fmt_time     = *std::localtime(&current_time);
     std::ostringstream oss;
-    oss << std::put_time(&fmt_time, "%d-%m-%y_%H-%M-%S");
+    oss << std::put_time(&fmt_time, "%d-%m-%y_%S");
     return oss.str();
 }
-
 
 auto file::Handler::read() -> std::pair<v<v<int>>, v<v<int>>> {
     size_t rows = 0, columns = 0;
@@ -25,6 +31,7 @@ auto file::Handler::write(const std::vector<std::vector<int>>& v_data,
     size_t columns = v_data.empty() ? 0 : v_data[0].size();
     fileStream << rows << ' ' << columns << '\n';
     writeVec(v_data);
+    fileStream << '\n';
     writeVec(h_data);
 }
 
@@ -50,7 +57,7 @@ auto file::createFileName(QString prefix) -> QString {
     if (prefix.isEmpty()) {
         prefix = "maze_";
     }
-    return prefix + time_str;
+    return prefix + time_str + ".txt";
 }
 
 auto file::getFileNameFromPath(QString file_path) -> QString {
@@ -62,4 +69,10 @@ auto file::getFileNameFromPath(QString file_path) -> QString {
 
     std::reverse(resultFileName.begin(), resultFileName.end());
     return resultFileName;
+}
+
+auto file::Handler::createFile() -> void {  // weird ~-~
+    fileStream.open(fileName, std::fstream::out); // creates file
+    fileStream.close();
+    fileStream.open(fileName, std::fstream::in |std::fstream::out); // reopen with read & write flags
 }

@@ -2,6 +2,10 @@
 #include "file_handler.h"
 #include "ui/ui_mainwindow.h"
 
+namespace file {
+extern QString kSavedMazesDirPath;
+};
+
 auto MazeUi::create(const MazeGenerator& maze, Ui::MainWindow* ui) -> void {
     auto field = new QLabel();
     field->setObjectName("drawable_label");
@@ -62,9 +66,13 @@ auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
     maze.setHData(h_data);
 }
 
+#include <QFile>
+#include <cassert>
+
 auto MazeUi::save(const MazeGenerator& maze) -> void {
     auto file_name = file::createFileName();
     auto file_path = file::kSavedMazesDirPath + file_name;
+
     file::Handler fhandler(file_path);
     fhandler.write(maze.getRefVData(), maze.getRefHData());
 }

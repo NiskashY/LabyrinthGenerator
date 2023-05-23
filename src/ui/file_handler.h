@@ -10,31 +10,27 @@
 #include <vector>
 
 namespace file {
-
-const QString kSavedMazesDirPath = QApplication::applicationDirPath() + "/saved-mazes/";
-
 class Handler {
 public:
     template <class T> using v = std::vector<T>;
-    explicit Handler(const std::string& fileName) : fileStream(fileName) {
-    }
 
-    explicit Handler(const QString& fileName) : fileStream(fileName.toStdString()) {
-    }
-
+    explicit Handler(const QString&);
 
     auto read() -> std::pair<v<v<int>>, v<v<int>>>;
 
-    auto write(const std::vector<std::vector<int>>& v_data,
-               const std::vector<std::vector<int>>& h_data) -> void;
+    auto write(const std::vector<std::vector<int>>&,
+               const std::vector<std::vector<int>>&) -> void;
 
-private:
-    auto readVec(auto& vec) -> void;
+private: // funcitons
+    auto createFile() -> void;
 
-    auto writeVec(const auto& vec) -> void;
+    auto readVec(auto&) -> void;
 
+    auto writeVec(const auto&) -> void;
+
+private: // vars
+    const std::string fileName;
     std::fstream fileStream;
-
 };
 
 auto createFileName(QString = "") -> QString;

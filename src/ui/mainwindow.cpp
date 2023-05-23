@@ -48,7 +48,6 @@ void MainWindow::on_openButton_clicked() {
 }
 
 void MainWindow::on_saveButton_clicked() {
-    std::cout << "ee" << std::endl;
     mazeUi.save(maze);
 }
 
