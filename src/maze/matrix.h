@@ -13,6 +13,9 @@ public:
     auto show() const -> void;
     auto resize(size_t, size_t, int = 0) -> void;
 
+    auto setData(std::vector<std::vector<int>>) -> void;
+    auto getData() const -> std::vector<std::vector<int>>;
+    auto getRefData() const -> const std::vector<std::vector<int>>&;
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
 
@@ -26,7 +29,7 @@ private:    // functions
     auto isBordersCorrect(size_t, size_t) const -> bool;
 
 protected:    // variables
-    std::vector<std::vector<char>> walls;
+    std::vector<std::vector<int>> walls;
     size_t rows_count = 0;
     size_t columns_count = 0;
 };
@@ -48,3 +51,5 @@ public:
 
     auto assignBorder() -> void override;
 };
+
+std::ostream& operator<<(std::ostream& out, const Matrix& matrix);
