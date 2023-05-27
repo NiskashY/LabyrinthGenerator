@@ -51,9 +51,27 @@ void MainWindow::on_openButton_clicked() {
 }
 
 void MainWindow::on_saveButton_clicked() {
-    auto pix = this->findChild<QLabel*>("drawable_label")->pixmap();
-    auto savedDirPath = mazeUi.save(maze, pix);
+    auto pix_label = this->findChild<QLabel*>("drawable_label");
+    auto savedDirPath = mazeUi.save(maze, pix_label);
     QMessageBox msgBox;
     msgBox.setText("Saved into directory:" + savedDirPath);
     msgBox.exec();
 }
+
+
+void MainWindow::on_changeBackground_clicked() {
+    QFileDialog dirWindow(this);
+    dirWindow.setWindowTitle("Select Maze File");
+    dirWindow.setFileMode(QFileDialog::ExistingFile);
+    dirWindow.setNameFilter("Maze files (*.png, *.jpg)");
+    dirWindow.setDirectory(QApplication::applicationDirPath());
+
+    if (dirWindow.exec()) {
+        QStringList selectedFiles = dirWindow.selectedFiles();
+        auto pix_label = this->findChild<QLabel*>("drawable_label");
+        for (const auto& file_path : selectedFiles) {
+            mazeUi.changeBackground(file_path, maze, pix_label);
+        }
+    }
+}
+

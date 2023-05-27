@@ -23,7 +23,18 @@ auto MazeUi::create(const MazeGenerator& maze) -> void {
     ui->mazeLayout->addWidget(field);
 }
 
-auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> void {
+auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
+    QPixmap pix(drawable_label->rect().size());
+    if (!image.isSelected) {
+        pix.fill(Qt::black);
+    } else {
+        pix.load(image.fileName);
+        pix = pix.scaled(drawable_label->rect().size());
+    }
+    return pix;
+}
+
+auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
     const double cellHeight = (double)drawable_label->rect().height() / maze.getRows();
     const double cellWidth  = (double)drawable_label->rect().width() / maze.getColumns();
 
@@ -34,9 +45,7 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
         };
     };
 
-    QPixmap pix(drawable_label->rect().size());
-    pix.fill(Qt::black);
-
+    auto pix = getMazeFieldPixmap(drawable_label);
     QPainter painter(&pix);
     painter.setPen(QPen(Qt::white, 2));
 
@@ -56,6 +65,11 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) const -> vo
     drawable_label->setPixmap(pix);
 }
 
+auto MazeUi::changeBackground(QString fileName, const MazeGenerator& maze, QLabel* label) -> void {
+    image.set(fileName);
+    draw(maze, label);
+}
+
 void MazeUi::clear() {
     QLayoutItem *child;
     while ((child = ui->mazeLayout->takeAt(0)) != nullptr) {
@@ -73,14 +87,14 @@ auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
     maze.setHData(h_data);
 }
 
-auto MazeUi::save(const MazeGenerator& maze, const QPixmap& pix) -> QString {
+auto MazeUi::save(const MazeGenerator& maze, QLabel* label) -> QString {
     auto name = file::createFileName();
 
     auto dir_path = file::kSavedMazesDirPath + name + "/";
     QDir qdir;
     qdir.mkdir(dir_path);
 
-    saveMazeImage(pix, dir_path + name + ".png");
+    saveMazeImage(label->pixmap(), dir_path + name + ".png");
     saveMazeData(maze, dir_path + name + ".txt");
 
     return dir_path;
@@ -96,3 +110,5 @@ auto MazeUi::saveMazeImage(const QPixmap& pix, QString file_path) -> void {
     file.open(QIODevice::WriteOnly);
     pix.save(&file, "PNG");
 }
+
+// TODO: background reset button

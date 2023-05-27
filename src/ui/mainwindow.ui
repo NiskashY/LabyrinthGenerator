@@ -36,6 +36,13 @@
       <item>
        <layout class="QVBoxLayout" name="openSaveLayout">
         <item>
+         <widget class="QPushButton" name="changeBackground">
+          <property name="text">
+           <string>Change Background</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="openButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">

@@ -25,6 +25,9 @@ public slots:
     void on_generateButton_clicked();
     void on_openButton_clicked();
     void on_saveButton_clicked();
+    void on_changeBackground_clicked();
+
+private slots:
 
 private:
     Ui::MainWindow *ui;
