@@ -36,11 +36,22 @@
       <item>
        <layout class="QVBoxLayout" name="openSaveLayout">
         <item>
-         <widget class="QPushButton" name="changeBackground">
-          <property name="text">
-           <string>Change Background</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QToolButton" name="resetBackgroundButton">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="changeBackground">
+            <property name="text">
+             <string>Change Background</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QPushButton" name="openButton">

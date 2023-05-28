@@ -27,7 +27,9 @@ set(PROJECT_SOURCES
         src/maze/horizontal_matrix.cpp
         src/maze/vertical_matrix.cpp
         src/maze/maze.cpp
-        src/resourses.qrc
+
+        images/resourses.qrc
+        images/stylesheet.qss
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

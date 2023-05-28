@@ -18,10 +18,8 @@ struct ImageSelector {
     bool isSelected = false;
     QString fileName;
 
-    auto set(QString newFileName) {
-        fileName = newFileName;
-        isSelected = true;
-    }
+    auto set(QString newFileName) -> void;
+    auto reset() -> void;
 };
 
 class MazeUi {
@@ -31,7 +29,8 @@ public:
     auto create(const MazeGenerator&) -> void;
     auto draw(const MazeGenerator&, QLabel*) -> void;
     auto clear() -> void;
-    auto changeBackground(QString, const MazeGenerator&, QLabel*) -> void;
+    auto changeBackground(QString, const MazeGenerator&) -> void;
+    auto resetBackground(const MazeGenerator&) -> void;
 
     auto open(QString, MazeGenerator&) -> void;
     auto save(const MazeGenerator&, QLabel*) -> QString;
