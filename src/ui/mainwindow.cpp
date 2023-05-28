@@ -50,9 +50,11 @@ void MainWindow::on_openButton_clicked() {
 }
 
 void MainWindow::on_changeBackground_clicked() {
+    // TODO: implement default themes
+
     createFileWindow ([&] (QString path) {
         mazeUi.changeBackground(path, maze);
-    }, "*.png, *.jpg");
+    }, "*.png *.jpg");
 }
 
 void MainWindow::on_resetBackgroundButton_clicked() {

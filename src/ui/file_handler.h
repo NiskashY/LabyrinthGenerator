@@ -11,12 +11,13 @@
 namespace file {
 class Handler {
 public:
-    template <class T> using v = std::vector<T>;
+    using matrix_row_t = std::vector<uint8_t>;
+    using matrix_t = std::vector<matrix_row_t>;
 
     explicit Handler(const QString&);
 
-    auto read() -> std::pair<v<v<int>>, v<v<int>>>;
-    auto write(const v<v<int>>&, const v<v<int>>&) -> void;
+    auto read() -> matrix_t;
+    auto write(const matrix_t&) -> void;
 
 private: // funcitons
     auto createFile() -> void;

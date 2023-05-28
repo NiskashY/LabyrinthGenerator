@@ -60,11 +60,10 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
     for (size_t i = 0; i < maze.getRows(); ++i) {
         for (size_t j = 0; j < maze.getColumns(); ++j) {
             auto [x0, y0, x1, y1] = getCell(i, j);
-            auto [isHorizontalWall, isVerticalWall] = maze.get(i, j);   // v -> h, h -> v;
-            if (isVerticalWall) {
+            if (maze.isHorizontalWall(i, j)) {
                 painter.drawLine(x0, y1, x1, y1);
             }
-            if (isHorizontalWall) {
+            if (maze.isVerticallWall(i, j)) {
                 painter.drawLine(x1, y0, x1, y1);
             }
         }
@@ -92,19 +91,19 @@ void MazeUi::clear() {
 }
 
 auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
-    auto file_name = file::getFileNameFromPath(file_path);
-    QFile::copy(file_path, file::kSavedMazesDirPath + file_name);
     file::Handler fhandler(file_path);
-    auto [v_data, h_data] = fhandler.read();
-    maze.setVData(v_data);
-    maze.setHData(h_data);
+    maze.setData(fhandler.read());
 }
 
 auto MazeUi::save(const MazeGenerator& maze, QLabel* label) -> QString {
     auto name = file::createFileName();
 
-    auto dir_path = file::kSavedMazesDirPath + name + "/";
     QDir qdir;
+    if (!qdir.exists(file::kSavedMazesDirPath)) {
+        qdir.mkdir(file::kSavedMazesDirPath);
+    }
+
+    auto dir_path = file::kSavedMazesDirPath + name + "/";
     qdir.mkdir(dir_path);
 
     saveMazeImage(label->pixmap(), dir_path + name + ".png");
@@ -115,7 +114,7 @@ auto MazeUi::save(const MazeGenerator& maze, QLabel* label) -> QString {
 
 auto MazeUi::saveMazeData(const MazeGenerator& maze, QString file_path) -> void {
     file::Handler fhandler(file_path);
-    fhandler.write(maze.getRefVData(), maze.getRefHData());
+    fhandler.write(maze.getRefData());
 }
 
 auto MazeUi::saveMazeImage(const QPixmap& pix, QString file_path) -> void {
@@ -123,8 +122,3 @@ auto MazeUi::saveMazeImage(const QPixmap& pix, QString file_path) -> void {
     file.open(QIODevice::WriteOnly);
     pix.save(&file, "PNG");
 }
-
-// TODO: unite vert and hori matrices into one matrix
-//       if vert wall is placed -> 01 in binary
-//       if hori wall is placed -> 10 in binary
-//       if vert and hor placed -> 11 in binary
