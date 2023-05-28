@@ -24,30 +24,12 @@ MainWindow::~MainWindow()
 void MainWindow::on_generateButton_clicked() {
     if (!ui->inputHeight->text().isEmpty() &&
         !ui->inputWidth->text().isEmpty()) {
-        maze.create(ui->inputHeight->text().toInt(),
+        maze.resize(ui->inputHeight->text().toInt(),
                     ui->inputWidth->text().toInt());
-    } else {
-        maze.generate();
     }
+
+    maze.generate();
     mazeUi.create(maze);
-}
-
-void MainWindow::on_openButton_clicked() {
-    QFileDialog dirWindow(this);
-    dirWindow.setWindowTitle("Select Maze File");
-    dirWindow.setFileMode(QFileDialog::ExistingFile);
-    dirWindow.setNameFilter("Maze files (*.txt)");
-    dirWindow.setDirectory(QApplication::applicationDirPath());
-
-    if (dirWindow.exec()) {
-        QStringList selectedFiles = dirWindow.selectedFiles();
-        for (const auto& file_path : selectedFiles) {
-            mazeUi.open(file_path, maze);
-            mazeUi.create(maze);
-            ui->inputHeight->setText(QString::number(maze.getRows()));
-            ui->inputWidth->setText(QString::number(maze.getColumns()));
-        }
-    }
 }
 
 void MainWindow::on_saveButton_clicked() {
@@ -58,20 +40,36 @@ void MainWindow::on_saveButton_clicked() {
     msgBox.exec();
 }
 
+void MainWindow::on_openButton_clicked() {
+    createFileWindow ([&](QString path) {
+        mazeUi.open(path, maze);
+        mazeUi.create(maze);
+        ui->inputHeight->setText(QString::number(maze.getRows()));
+        ui->inputWidth->setText(QString::number(maze.getColumns()));
+    }, "*.txt");
+}
 
 void MainWindow::on_changeBackground_clicked() {
+    createFileWindow ([&] (QString path) {
+        mazeUi.changeBackground(path, maze);
+    }, "*.png, *.jpg");
+}
+
+void MainWindow::on_resetBackgroundButton_clicked() {
+    mazeUi.resetBackground(maze);
+}
+
+void MainWindow::createFileWindow(auto windowFunction, QString fileTypes) {
     QFileDialog dirWindow(this);
     dirWindow.setWindowTitle("Select Maze File");
     dirWindow.setFileMode(QFileDialog::ExistingFile);
-    dirWindow.setNameFilter("Maze files (*.png, *.jpg)");
+
+    dirWindow.setNameFilter("files (" + fileTypes + ")");
     dirWindow.setDirectory(QApplication::applicationDirPath());
 
     if (dirWindow.exec()) {
-        QStringList selectedFiles = dirWindow.selectedFiles();
-        auto pix_label = this->findChild<QLabel*>("drawable_label");
-        for (const auto& file_path : selectedFiles) {
-            mazeUi.changeBackground(file_path, maze, pix_label);
+        for (const auto& file_path : dirWindow.selectedFiles()) {
+            windowFunction(file_path);
         }
     }
 }
-

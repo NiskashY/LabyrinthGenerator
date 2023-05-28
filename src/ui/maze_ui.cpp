@@ -8,35 +8,43 @@ namespace file {
 extern QString kSavedMazesDirPath;
 };
 
+auto ImageSelector::set(QString newFileName) -> void {
+    fileName = newFileName;
+    isSelected = true;
+}
+
+auto ImageSelector::reset() -> void {
+    isSelected = false;
+}
+
 MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {
 
 }
 
 auto MazeUi::create(const MazeGenerator& maze) -> void {
-    this->clear();
+    clear();
     auto field = new QLabel();
     field->setObjectName("drawable_label");
     field->setProperty("field", "maze");
     field->setScaledContents(true);
-    this->draw(maze, field);
+    draw(maze, field);
 
     ui->mazeLayout->addWidget(field);
 }
 
 auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
     QPixmap pix(drawable_label->rect().size());
-    if (!image.isSelected) {
-        pix.fill(Qt::black);
-    } else {
+    pix.fill(Qt::black);
+    if (image.isSelected) {
         pix.load(image.fileName);
-        pix = pix.scaled(drawable_label->rect().size());
+        return pix.scaled(drawable_label->rect().size());
     }
     return pix;
 }
 
 auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
-    const double cellHeight = (double)drawable_label->rect().height() / maze.getRows();
-    const double cellWidth  = (double)drawable_label->rect().width() / maze.getColumns();
+    const auto cellHeight = (double)drawable_label->rect().height() / maze.getRows();
+    const auto cellWidth  = (double)drawable_label->rect().width()  / maze.getColumns();
 
     auto getCell = [&](int i, int j) {
         return std::tuple{
@@ -65,9 +73,14 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
     drawable_label->setPixmap(pix);
 }
 
-auto MazeUi::changeBackground(QString fileName, const MazeGenerator& maze, QLabel* label) -> void {
+auto MazeUi::changeBackground(QString fileName, const MazeGenerator& maze) -> void {
     image.set(fileName);
-    draw(maze, label);
+    create(maze);
+}
+
+auto MazeUi::resetBackground(const MazeGenerator& maze) -> void {
+    image.reset();
+    create(maze);
 }
 
 void MazeUi::clear() {
@@ -111,4 +124,7 @@ auto MazeUi::saveMazeImage(const QPixmap& pix, QString file_path) -> void {
     pix.save(&file, "PNG");
 }
 
-// TODO: background reset button
+// TODO: unite vert and hori matrices into one matrix
+//       if vert wall is placed -> 01 in binary
+//       if hori wall is placed -> 10 in binary
+//       if vert and hor placed -> 11 in binary

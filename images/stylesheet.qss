@@ -1,0 +1,11 @@
+QLabel[field="maze"] {
+    border: 2px solid white;
+}
+
+QToolButton#resetBackgroundButton {
+    border-image: url(":/style/restart.svg");
+}
+
+QToolButton#resetBackgroundButton:hover {
+    background-color: gray;
+}
