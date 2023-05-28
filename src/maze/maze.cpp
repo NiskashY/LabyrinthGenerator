@@ -28,20 +28,12 @@ auto MazeGenerator::create(size_t rows, size_t columns) -> void {
 }
 
 auto MazeGenerator::show() const -> void {
-    std::cout << "\nvertical: " << std::endl;
-    vertical_walls.show();
-    std::cout << "\nhorizontal: " << std::endl;
-    horizontal_walls.show();
+    walls.show();
 }
 
 auto MazeGenerator::resize(size_t rows_, size_t columns_, int val) -> void {
     rows = rows_; columns = columns_;
-
-    vertical_walls.resize(rows, columns, val);
-    vertical_walls.assignBorder();
-
-    horizontal_walls.resize(rows, columns, val);
-    horizontal_walls.assignBorder();
+    walls.resize(rows, columns, val);
 }
 
 auto MazeGenerator::getRows() const -> size_t {
@@ -52,32 +44,26 @@ auto MazeGenerator::getColumns() const -> size_t {
     return columns;
 }
 
-auto MazeGenerator::getVData() const -> std::vector<std::vector<int>> {
-    return vertical_walls.getData();
+auto MazeGenerator::getData() const -> Matrix::matrix_t {
+    return walls.getData();
 }
 
-auto MazeGenerator::getHData() const -> std::vector<std::vector<int>> {
-    return horizontal_walls.getData();
+auto MazeGenerator::getRefData() const -> const Matrix::matrix_t& {
+    return walls.getRefData();
 }
 
-auto MazeGenerator::getRefVData() const -> const std::vector<std::vector<int>>& {
-    return vertical_walls.getRefData();
+auto MazeGenerator::setData(const Matrix::matrix_t& data) -> void {
+    walls.setData(data);
+    rows = walls.getRows();
+    columns = walls.getColumns();
 }
 
-auto MazeGenerator::getRefHData() const -> const std::vector<std::vector<int>>& {
-    return horizontal_walls.getRefData();
+auto MazeGenerator::isHorizontalWall(size_t x, size_t y) const -> bool {
+    return walls.isHorizontalWallExist(x, y);
 }
 
-auto MazeGenerator::setVData(const std::vector<std::vector<int>>& data) -> void {
-    vertical_walls.setData(data);
-    rows = vertical_walls.getRows();
-    columns = vertical_walls.getColumns();
-}
-
-auto MazeGenerator::setHData(const std::vector<std::vector<int>>& data) -> void {
-    horizontal_walls.setData(data);
-    rows = horizontal_walls.getRows();
-    columns = horizontal_walls.getColumns();
+auto MazeGenerator::isVerticallWall(size_t x, size_t y) const -> bool {
+    return walls.isVerticalWallExist(x, y);
 }
 
 auto MazeGenerator::getRoot(int v) -> int {
@@ -120,11 +106,12 @@ auto MazeGenerator::createVerticalWalls(int row) -> void {
             if (left == right) {
                 parent[line[i + 1]] = set_counter++;
             }
-            vertical_walls.setWall(row, i);
+            walls.setVerticalWall(row, i);
         } else {
             mergeSets(line[i], line[i + 1]);
         }
     }
+    line.back() = true; // place right wall in the last cell of the row
 
     for (int i = 0; i < columns; ++i) {
         line[i] = getRoot(line[i]);
@@ -135,24 +122,26 @@ auto MazeGenerator::createHorizontalWalls(int row) -> void {
     // random choice to put wall or not
     // if every cell in current set with bottom wall ->
     // -> randomly choose to remove bottom wall
+
+    auto total_rows = walls.getRows();
     for (int i = 0; i < columns; ++i) {
-        if (random(0, 1)) {
-            horizontal_walls.setWall(row, i);
+        if (random(0, 1) || row + 1 == total_rows) {
+            walls.setHorizontalWall(row, i);
         }
     }
 
     int left = 0, right = 0;
-    while (left < columns) {
+    while (row + 1 != total_rows && left < columns) {
         int walls_bottom_count = 0;
         while (right < columns && line[right] == line[left]) {
-            walls_bottom_count += horizontal_walls.isWallExist(row, right);
+            walls_bottom_count += walls.isHorizontalWallExist(row, right);
             right += 1;
         }
 
         int total_cells = right - left;
         if (walls_bottom_count == total_cells) {
             int&& pos_to_override = left + random(0, total_cells - 1);
-            horizontal_walls.removeWall(row, pos_to_override);
+            walls.removeHorizontalWall(row, pos_to_override);
         }
 
         left = right;
@@ -161,7 +150,7 @@ auto MazeGenerator::createHorizontalWalls(int row) -> void {
 
 auto MazeGenerator::prepareNewLine(int row) -> void {
     for (int i = 0; i < columns; ++i) {
-        if (horizontal_walls.isWallExist(row, i)) {
+        if (walls.isHorizontalWallExist(row, i)) {
             line[i] = kEmptyCell;
         }
     }
@@ -176,9 +165,9 @@ auto MazeGenerator::addLastRow() -> void {
     createVerticalWalls(i);
 
     for (int j = 0; j + 1 < columns; ++j) {
-        const bool is_right_wall = vertical_walls.isWallExist(i, j);
+        const bool is_right_wall = walls.isVerticalWallExist(i, j);
         if (is_right_wall && getRoot(line[j]) != getRoot(line[j + 1])) {
-            vertical_walls.removeWall(i, j);
+            walls.removeVerticalWall(i, j);
             mergeSets(line[j], line[j + 1]);
         }
     }

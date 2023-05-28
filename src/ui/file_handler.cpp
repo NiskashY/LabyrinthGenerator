@@ -15,23 +15,19 @@ auto getTimeStr() -> std::string {
     return oss.str();
 }
 
-auto file::Handler::read() -> std::pair<v<v<int>>, v<v<int>>> {
+auto file::Handler::read() -> matrix_t {
     size_t rows = 0, columns = 0;
     fileStream >> rows >> columns;
-    v<v<int>> v_data(rows, v<int>(columns));
-    v<v<int>> h_data(rows, v<int>(columns));
-    readVec(v_data);
-    readVec(h_data);
-    return std::pair{v_data, h_data};
+    matrix_t data(rows, matrix_row_t(columns));
+    readVec(data);
+    return data;
 }
 
-auto file::Handler::write(const v<v<int>>& v_data, const v<v<int>>& h_data) -> void {
-    size_t rows = v_data.size();
-    size_t columns = v_data.empty() ? 0 : v_data[0].size();
+auto file::Handler::write(const matrix_t& data) -> void {
+    size_t rows = data.size();
+    size_t columns = data.empty() ? 0 : data[0].size();
     fileStream << rows << ' ' << columns << '\n';
-    writeVec(v_data);
-    fileStream << '\n';
-    writeVec(h_data);
+    writeVec(data);
 }
 
 auto file::Handler::readVec(auto& vec) -> void {

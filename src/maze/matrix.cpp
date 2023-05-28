@@ -8,20 +8,20 @@ auto Matrix::resize(size_t cnt_rows, size_t cnt_columns, int val) -> void{
    rows_count = cnt_rows;
    columns_count = cnt_columns;
    walls.clear();
-   walls.resize(rows_count, std::vector<int>(columns_count, val));
+   walls.resize(rows_count, matrix_row_t(columns_count, val));
 }
 
-void Matrix::setData(std::vector<std::vector<int>> data) {
+auto Matrix::setData(matrix_t data) -> void {
    std::swap(walls, data);
    rows_count = walls.size();
    columns_count = walls.front().size();
 }
 
-auto Matrix::getData() const -> std::vector<std::vector<int>> {
+auto Matrix::getData() const -> matrix_t {
    return walls;
 }
 
-auto Matrix::getRefData() const -> const std::vector<std::vector<int>>& {
+auto Matrix::getRefData() const -> const matrix_t& {
    return walls;
 }
 
@@ -33,17 +33,30 @@ auto Matrix::getColumns() const -> size_t {
     return columns_count;
 }
 
-auto Matrix::setWall(size_t x, size_t y) -> bool {
-    return isBordersCorrect(x, y) && (walls[x][y] = true);
+auto Matrix::setVerticalWall(size_t x, size_t y) -> bool {
+    return isBordersCorrect(x, y) && (walls[x][y] |= 0b01);
 }
 
-auto Matrix::removeWall(size_t x, size_t y) -> bool {
-    return isBordersCorrect(x, y) && !(walls[x][y] = false);
+auto Matrix::setHorizontalWall(size_t x, size_t y) -> bool {
+    return isBordersCorrect(x, y) && (walls[x][y] |= 0b10);
 }
 
+auto Matrix::removeVerticalWall(size_t x, size_t y) -> bool {
+    return isBordersCorrect(x, y) && !(walls[x][y] &= ~(0b01));
+}
 
-auto Matrix::isWallExist(size_t x, size_t y) const -> bool {
-    return isBordersCorrect(x, y) && walls[x][y];
+auto Matrix::removeHorizontalWall(size_t x, size_t y) -> bool {
+    return isBordersCorrect(x, y) && !(walls[x][y] &= ~(0b10));
+}
+
+auto Matrix::isVerticalWallExist(size_t x, size_t y) const -> bool {
+    return isBordersCorrect(x, y) &&
+           (walls[x][y] & 0b01) != 0;
+}
+
+auto Matrix::isHorizontalWallExist(size_t x, size_t y) const -> bool {
+    return isBordersCorrect(x, y) &&
+           (walls[x][y] & 0b10) != 0;
 }
 
 auto Matrix::isBordersCorrect(size_t x, size_t y) const -> bool {

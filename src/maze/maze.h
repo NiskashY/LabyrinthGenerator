@@ -18,22 +18,15 @@ public:
     auto show() const -> void;
     auto create(size_t, size_t) -> void;
     auto resize(size_t, size_t, int = 0) -> void;
+
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
+    auto getData() const -> Matrix::matrix_t;
+    auto getRefData() const -> const Matrix::matrix_t&;
+    auto setData(const Matrix::matrix_t&) -> void;
 
-    auto get(size_t r, size_t c) const -> std::pair<bool, bool> {
-        return {vertical_walls.isWallExist(r, c),
-                horizontal_walls.isWallExist(r, c)};
-    }
-
-    auto getRefVData() const -> const std::vector<std::vector<int>>&;
-    auto getRefHData() const -> const std::vector<std::vector<int>>&;
-
-    auto getVData() const -> std::vector<std::vector<int>>;
-    auto getHData() const -> std::vector<std::vector<int>>;
-
-    auto setVData(const std::vector<std::vector<int>>&) -> void;
-    auto setHData(const std::vector<std::vector<int>>&) -> void;
+    auto isHorizontalWall(size_t x, size_t y) const -> bool;
+    auto isVerticallWall(size_t x, size_t y) const -> bool;
 
 private: // functions
     auto addLastRow()               -> void;
@@ -47,8 +40,7 @@ private: // functions
     auto getRoot(int)               -> int;
 
 private: // variables
-    VerticalMatrix vertical_walls;
-    HorizontalMatrix horizontal_walls;
+    Matrix walls;
 
     std::unordered_map<int, int> parent; // TODO: move this to local variable
     std::vector<int> line;     // TODO: move this to local varibale

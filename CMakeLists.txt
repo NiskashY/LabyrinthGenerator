@@ -24,8 +24,6 @@ set(PROJECT_SOURCES
         src/ui/file_handler.cpp
 
         src/maze/matrix.cpp
-        src/maze/horizontal_matrix.cpp
-        src/maze/vertical_matrix.cpp
         src/maze/maze.cpp
 
         images/resourses.qrc
