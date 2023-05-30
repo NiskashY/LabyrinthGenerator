@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../custom_aliases.h"
+
 #include <QString>
 
 #include <iomanip>
@@ -11,8 +13,6 @@
 namespace file {
 class Handler {
 public:
-    using matrix_row_t = std::vector<uint8_t>;
-    using matrix_t = std::vector<matrix_row_t>;
 
     explicit Handler(const QString&);
 

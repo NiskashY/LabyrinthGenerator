@@ -21,9 +21,9 @@ public:
 
     auto getRows() const -> size_t;
     auto getColumns() const -> size_t;
-    auto getData() const -> Matrix::matrix_t;
-    auto getRefData() const -> const Matrix::matrix_t&;
-    auto setData(const Matrix::matrix_t&) -> void;
+    auto getData() const -> matrix_t;
+    auto getRefData() const -> const matrix_t&;
+    auto setData(const matrix_t&) -> void;
 
     auto isHorizontalWall(size_t x, size_t y) const -> bool;
     auto isVerticallWall(size_t x, size_t y) const -> bool;

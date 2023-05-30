@@ -12,14 +12,13 @@
 
 #pragma once
 
+#include "../custom_aliases.h"
+
 #include <iostream>
 #include <vector>
 
 class Matrix { 
 public:
-    using matrix_row_t = std::vector<uint8_t>;
-    using matrix_t = std::vector<matrix_row_t>;
-
     Matrix() = default;
 
     explicit Matrix(size_t, size_t);
