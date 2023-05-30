@@ -3,7 +3,7 @@ create different mazes in one click
 
 program ui 0.002 :)
 
-![Screenshot](images/ui_example0.2.jpg)
+![Screenshot](images/ui_example0.2.png)
 
 # TODO
 1) add separate change-background window, that contains 
