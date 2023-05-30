@@ -14,14 +14,21 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         src/main.cpp
+        src/custom_aliases.h
 
         src/ui/mainwindow.cpp
         src/ui/mainwindow.ui
         src/ui/mainwindow.h
+
         src/ui/maze_ui.cpp
         src/ui/maze_ui.h
+
         src/ui/file_handler.h
         src/ui/file_handler.cpp
+
+        src/ui/change_background_window.h
+        src/ui/change_background_window.cpp
+        src/ui/change_background_window.ui
 
         src/maze/matrix.cpp
         src/maze/maze.cpp

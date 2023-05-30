@@ -44,15 +44,15 @@ auto MazeGenerator::getColumns() const -> size_t {
     return columns;
 }
 
-auto MazeGenerator::getData() const -> Matrix::matrix_t {
+auto MazeGenerator::getData() const -> matrix_t {
     return walls.getData();
 }
 
-auto MazeGenerator::getRefData() const -> const Matrix::matrix_t& {
+auto MazeGenerator::getRefData() const -> const matrix_t& {
     return walls.getRefData();
 }
 
-auto MazeGenerator::setData(const Matrix::matrix_t& data) -> void {
+auto MazeGenerator::setData(const matrix_t& data) -> void {
     walls.setData(data);
     rows = walls.getRows();
     columns = walls.getColumns();
