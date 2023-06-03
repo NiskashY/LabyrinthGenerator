@@ -4,7 +4,7 @@ create different mazes in one click
 program ui 0.002 :)
 
 <p align="center">
-![Screenshot](images/ui_example0.2.png)
+![Screenshot](images/ui_example0.2.jpg)
 </p>
 
 # TODO

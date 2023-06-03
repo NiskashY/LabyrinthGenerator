@@ -3,17 +3,11 @@
 #include "../custom_aliases.h"
 
 #include <QString>
-
-#include <iomanip>
-#include <ctime>
-#include <iostream>
 #include <fstream>
-#include <vector>
 
 namespace file {
 class Handler {
 public:
-
     explicit Handler(const QString&);
 
     auto read() -> matrix_t;
@@ -31,5 +25,6 @@ private: // vars
 
 auto createFileName(QString = "") -> QString;
 auto getFileNameFromPath(QString) -> QString;
+
 }; // end namespace file
 

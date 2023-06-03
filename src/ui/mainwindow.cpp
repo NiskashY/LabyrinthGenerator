@@ -1,8 +1,13 @@
 #include "mainwindow.h"
 #include "./ui/ui_mainwindow.h"
 
+#include <QApplication>
 #include <QValidator>
 #include <QMessageBox>
+
+#include "change_background_window.h"
+#include "file_window.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -41,7 +46,7 @@ void MainWindow::on_saveButton_clicked() {
 }
 
 void MainWindow::on_openButton_clicked() {
-    createFileWindow ([&](QString path) {
+    createFileWindow (this, [&](QString path) {
         mazeUi.open(path, maze);
         mazeUi.create(maze);
         ui->inputHeight->setText(QString::number(maze.getRows()));
@@ -52,26 +57,15 @@ void MainWindow::on_openButton_clicked() {
 void MainWindow::on_changeBackground_clicked() {
     // TODO: implement default themes
 
-    createFileWindow ([&] (QString path) {
-        mazeUi.changeBackground(path, maze);
-    }, "*.png *.jpg");
+    hide();
+    {
+        ChangeBackgroundWindow changeBackground;
+        changeBackground.exec();
+    }
+    show();
 }
 
 void MainWindow::on_resetBackgroundButton_clicked() {
     mazeUi.resetBackground(maze);
 }
 
-void MainWindow::createFileWindow(auto windowFunction, QString fileTypes) {
-    QFileDialog dirWindow(this);
-    dirWindow.setWindowTitle("Select Maze File");
-    dirWindow.setFileMode(QFileDialog::ExistingFile);
-
-    dirWindow.setNameFilter("files (" + fileTypes + ")");
-    dirWindow.setDirectory(QApplication::applicationDirPath());
-
-    if (dirWindow.exec()) {
-        for (const auto& file_path : dirWindow.selectedFiles()) {
-            windowFunction(file_path);
-        }
-    }
-}

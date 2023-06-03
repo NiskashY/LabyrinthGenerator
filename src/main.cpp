@@ -10,12 +10,14 @@ auto getStyleSheet() -> QString {
 }
 
 namespace file {
-    QString kSavedMazesDirPath;
+QString kSavedMazesDirPath;
+QString kSavedBackgroundPresetsDirPath;
 };
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     file::kSavedMazesDirPath = QApplication::applicationDirPath() + "/saved-mazes/";
+    file::kSavedBackgroundPresetsDirPath = QApplication::applicationDirPath() + "/background-presets/";
 
     a.setStyleSheet(getStyleSheet());
 

@@ -1,5 +1,13 @@
 #include "file_handler.h"
 
+#include <iostream>
+#include <iomanip>
+#include <ctime>
+#include <vector>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 file::Handler::Handler(const QString& fileName_) :
     fileName(fileName_.toStdString()), fileStream(fileName) {
     if (!fileStream) {
@@ -47,6 +55,13 @@ auto file::Handler::writeVec(const auto& vec) -> void {
     }
 }
 
+auto file::Handler::createFile() -> void {  // weird ~-~
+    fileStream.open(fileName, std::fstream::out); // creates file
+    fileStream.close();
+    fileStream.open(fileName, std::fstream::in |std::fstream::out); // reopen with read & write flags
+}
+
+
 auto file::createFileName(QString prefix) -> QString {
     auto time_str = QString::fromStdString(getTimeStr());
     if (prefix.isEmpty()) {
@@ -56,18 +71,21 @@ auto file::createFileName(QString prefix) -> QString {
 }
 
 auto file::getFileNameFromPath(QString file_path) -> QString {
-    QString resultFileName;
-
-    for (int i = (int)file_path.size() - 1; i >= 0 && file_path[i] != '/'; --i) {
-        resultFileName += file_path[i];
-    }
-
-    std::reverse(resultFileName.begin(), resultFileName.end());
-    return resultFileName;
+    return QString::fromStdString(fs::path(file_path.toStdString()).filename());
 }
 
-auto file::Handler::createFile() -> void {  // weird ~-~
-    fileStream.open(fileName, std::fstream::out); // creates file
-    fileStream.close();
-    fileStream.open(fileName, std::fstream::in |std::fstream::out); // reopen with read & write flags
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

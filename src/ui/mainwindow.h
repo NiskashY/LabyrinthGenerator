@@ -1,9 +1,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include <QFileDialog>
-
-#include <QApplication>
 
 #include "maze_ui.h"
 #include "../maze/maze.h"
@@ -27,9 +24,6 @@ public slots:
     void on_saveButton_clicked();
     void on_changeBackground_clicked();
     void on_resetBackgroundButton_clicked();
-
-private:
-    void createFileWindow(auto, QString = "");
 
 private:
     Ui::MainWindow *ui;

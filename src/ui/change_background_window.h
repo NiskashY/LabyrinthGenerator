@@ -1,7 +1,8 @@
 #pragma once
 
 #include <QDialog>
-#include <flowlayout.h> // TODO:
+#include <unordered_map>
+#include <QLabel>
 
 namespace Ui {
 class ChangeBackgroundWindow;
@@ -14,7 +15,11 @@ class ChangeBackgroundWindow : public QDialog
 public:
     explicit ChangeBackgroundWindow(QWidget *parent = nullptr);
     ~ChangeBackgroundWindow();
+private:
+    auto createImageLabel(QString) -> QLabel*;
 
 private:
+
     Ui::ChangeBackgroundWindow *ui;
+    std::unordered_map<QLabel*, QString> label_to_name;
 };

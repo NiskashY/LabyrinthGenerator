@@ -34,8 +34,11 @@ set(PROJECT_SOURCES
         src/ui/change_background_window.cpp
         src/ui/change_background_window.ui
 
+        src/ui/file_window.h
+
         src/maze/matrix.cpp
         src/maze/maze.cpp
+
 
         images/resourses.qrc
         images/stylesheet.qss
