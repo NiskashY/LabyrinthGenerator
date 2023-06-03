@@ -1,7 +1,7 @@
-#ifndef CHANGE_BACKGROUND_WINDOW_H
-#define CHANGE_BACKGROUND_WINDOW_H
+#pragma once
 
 #include <QDialog>
+#include <flowlayout.h> // TODO:
 
 namespace Ui {
 class ChangeBackgroundWindow;
@@ -18,5 +18,3 @@ public:
 private:
     Ui::ChangeBackgroundWindow *ui;
 };
-
-#endif // CHANGE_BACKGROUND_WINDOW_H
