@@ -1,30 +1,22 @@
 #include "maze.h"
+#include <random>
 
-auto random(int l, int r) -> int {  // [l, r]
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(l, r);
-    return distrib(gen);
+namespace {
+    auto random(int l, int r) -> int {  // [l, r]
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distrib(l, r);
+        return distrib(gen);
+    }
 }
 
 MazeGenerator::MazeGenerator(size_t rows_, size_t columns_) {
-    this->resize(rows_, columns_);
-}
-
-auto MazeGenerator::generate() -> void {
-    fillEmptyCells();
-    for (int i = 0; i + 1 < rows; ++i) {
-        assignUniqueSets();
-        createVerticalWalls(i);
-        createHorizontalWalls(i);
-        prepareNewLine(i);
-    }
-    addLastRow();
+    resize(rows_, columns_);
 }
 
 auto MazeGenerator::create(size_t rows, size_t columns) -> void {
-    this->resize(rows, columns);
-    this->generate();
+    resize(rows, columns);
+    generate();
 }
 
 auto MazeGenerator::show() const -> void {
@@ -66,6 +58,17 @@ auto MazeGenerator::isVerticallWall(size_t x, size_t y) const -> bool {
     return walls.isVerticalWallExist(x, y);
 }
 
+auto MazeGenerator::generate() -> void {
+    fillEmptyCells();
+    for (int i = 0; i + 1 < rows; ++i) {
+        assignUniqueSets();
+        createVerticalWalls(i);
+        createHorizontalWalls(i);
+        prepareNewLine(i);
+    }
+    addLastRow();
+}
+
 auto MazeGenerator::getRoot(int v) -> int {
     if (parent.contains(v) && parent[v] != v) {
         return parent[v] = getRoot(parent[v]);
@@ -99,19 +102,13 @@ auto MazeGenerator::createVerticalWalls(int row) -> void {
     // else -> unite sets
 
     for (int i = 0; i + 1 < columns; ++i) {
-        bool is_put_wall = random(0, 1);
-        int left  = getRoot(line[i]);
-        int right = getRoot(line[i + 1]);
-        if (left == right || is_put_wall) {
-            if (left == right) {
-                parent[line[i + 1]] = set_counter++;
-            }
+        if (random(0, 1) || getRoot(line[i]) == getRoot(line[i + 1])) {
             walls.setVerticalWall(row, i);
         } else {
             mergeSets(line[i], line[i + 1]);
         }
     }
-    line.back() = true; // place right wall in the last cell of the row
+    walls.setVerticalWall(row, columns - 1); // place right wall in the last cell of the row
 
     for (int i = 0; i < columns; ++i) {
         line[i] = getRoot(line[i]);
@@ -123,24 +120,23 @@ auto MazeGenerator::createHorizontalWalls(int row) -> void {
     // if every cell in current set with bottom wall ->
     // -> randomly choose to remove bottom wall
 
-    auto total_rows = walls.getRows();
     for (int i = 0; i < columns; ++i) {
-        if (random(0, 1) || row + 1 == total_rows) {
+        if (random(0, 1)) {
             walls.setHorizontalWall(row, i);
         }
     }
 
     int left = 0, right = 0;
-    while (row + 1 != total_rows && left < columns) {
+    while (left < columns) {
         int walls_bottom_count = 0;
-        while (right < columns && line[right] == line[left]) {
+        while (right < columns && getRoot(line[right]) == getRoot(line[left])) {
             walls_bottom_count += walls.isHorizontalWallExist(row, right);
             right += 1;
         }
 
         int total_cells = right - left;
         if (walls_bottom_count == total_cells) {
-            int&& pos_to_override = left + random(0, total_cells - 1);
+            int pos_to_override = left + random(0, total_cells - 1);
             walls.removeHorizontalWall(row, pos_to_override);
         }
 
@@ -157,7 +153,7 @@ auto MazeGenerator::prepareNewLine(int row) -> void {
 }
 
 auto MazeGenerator::addLastRow() -> void {
-    // if set[i] != set[i + 1] && horizontal[i] is set
+    // if set[i] != set[i + 1] && vertical wall is set
     // than i need to remove current right border
 
     int i = (int)rows - 1;  // last row index
@@ -165,7 +161,7 @@ auto MazeGenerator::addLastRow() -> void {
     createVerticalWalls(i);
 
     for (int j = 0; j + 1 < columns; ++j) {
-        const bool is_right_wall = walls.isVerticalWallExist(i, j);
+        bool is_right_wall = walls.isVerticalWallExist(i, j);
         if (is_right_wall && getRoot(line[j]) != getRoot(line[j + 1])) {
             walls.removeVerticalWall(i, j);
             mergeSets(line[j], line[j + 1]);

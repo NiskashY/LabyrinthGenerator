@@ -13,3 +13,4 @@ build-src-Desktop-Debug/
 build
 final_stage_conf.txt
 CMakeLists.txt.user
+nohup*

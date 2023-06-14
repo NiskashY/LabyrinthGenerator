@@ -1,9 +1,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include <QFileDialog>
-
-#include <QApplication>
 
 #include "maze_ui.h"
 #include "../maze/maze.h"

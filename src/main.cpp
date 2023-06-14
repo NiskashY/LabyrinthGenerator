@@ -1,4 +1,4 @@
-#include "ui/mainwindow.h"
+#include "./ui/mainwindow.h"
 
 #include <QApplication>
 #include <QFile>
@@ -14,6 +14,8 @@ namespace file {
 };
 
 int main(int argc, char *argv[]) {
+    srand(time(nullptr));
+
     QApplication a(argc, argv);
     file::kSavedMazesDirPath = QApplication::applicationDirPath() + "/saved-mazes/";
 

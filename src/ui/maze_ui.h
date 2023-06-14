@@ -8,15 +8,16 @@
 #include <QLabel>
 #include <QFile>
 #include <QLayoutItem>
-
+#include <QtGlobal>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 struct ImageSelector {
+    constexpr static auto kDefaultFileName = ":/style/background-preset/checked_dark_blue.jpg";
     bool isSelected = false;
-    QString fileName;
+    QString fileName = kDefaultFileName;
 
     auto set(QString newFileName) -> void;
     auto reset() -> void;

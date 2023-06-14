@@ -1,11 +1,8 @@
 #pragma once
 
-#include <random>
 #include <unordered_map>
 
 #include "matrix.h"
-
-auto random(int, int) -> int;
 
 class MazeGenerator {
 public:

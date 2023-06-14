@@ -3,12 +3,18 @@
 
 #include <QValidator>
 #include <QMessageBox>
+#include <QScreen>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow), mazeUi(ui)
 {
     ui->setupUi(this);
+
+    // Center Widget
+    move(screen()->geometry().center() - frameGeometry().center());
+
     ui->inputHeight->setValidator(new QIntValidator(0, 100, this));
     ui->inputWidth->setValidator(new QIntValidator(0, 100, this));
     setWindowTitle("Maze Generator");

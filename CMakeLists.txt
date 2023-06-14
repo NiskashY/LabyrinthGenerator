@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(LabyrinthGenerator VERSION 0.1 LANGUAGES CXX)
 
+# SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -9,32 +10,35 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+file(GLOB SRC_FILES
+    ${PROJECT_SOURCE_DIR}/src/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/maze/*.cpp
+    ${PROJECT_SOURCE_DIR}/src/ui/*.cpp
+)
+
+file(GLOB HDR_FILES
+    ${PROJECT_SOURCE_DIR}/src/*.h
+    ${PROJECT_SOURCE_DIR}/src/maze/*.h
+    ${PROJECT_SOURCE_DIR}/src/ui/*.h
+)
+
+file(GLOB UI_FILES
+    ${PROJECT_SOURCE_DIR}/src/*.ui
+    ${PROJECT_SOURCE_DIR}/src/maze/*.ui
+    ${PROJECT_SOURCE_DIR}/src/ui/*.ui
+)
+
+
 set(PROJECT_SOURCES
-        src/main.cpp
-        src/custom_aliases.h
+    ${SRC_FILES}
+    ${HDR_FILES}
+    ${UI_FILES}
 
-        src/ui/mainwindow.cpp
-        src/ui/mainwindow.ui
-        src/ui/mainwindow.h
-
-        src/ui/maze_ui.cpp
-        src/ui/maze_ui.h
-
-        src/ui/file_handler.h
-        src/ui/file_handler.cpp
-
-        src/ui/change_background_window.h
-        src/ui/change_background_window.cpp
-        src/ui/change_background_window.ui
-
-        src/maze/matrix.cpp
-        src/maze/maze.cpp
-
-        images/resourses.qrc
-        images/stylesheet.qss
+    images/resourses.qrc
+    images/stylesheet.qss
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -48,21 +52,21 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(LabyrinthGenerator SHARED
+        add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(LabyrinthGenerator
+        add_executable(${PROJECT_NAME}
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(LabyrinthGenerator PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(LabyrinthGenerator PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -70,7 +74,7 @@ set_target_properties(LabyrinthGenerator PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS LabyrinthGenerator
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 

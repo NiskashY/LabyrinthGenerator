@@ -14,7 +14,10 @@ auto ImageSelector::set(QString newFileName) -> void {
 }
 
 auto ImageSelector::reset() -> void {
-    isSelected = false;
+    if (isSelected) {
+        fileName = kDefaultFileName;
+        isSelected = false;
+    }
 }
 
 MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {
@@ -34,12 +37,8 @@ auto MazeUi::create(const MazeGenerator& maze) -> void {
 
 auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
     QPixmap pix(drawable_label->rect().size());
-    pix.fill(Qt::black);
-    if (image.isSelected) {
-        pix.load(image.fileName);
-        return pix.scaled(drawable_label->rect().size());
-    }
-    return pix;
+    pix.load(image.fileName);
+    return pix.scaled(drawable_label->rect().size());
 }
 
 auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
@@ -55,7 +54,7 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
 
     auto pix = getMazeFieldPixmap(drawable_label);
     QPainter painter(&pix);
-    painter.setPen(QPen(Qt::white, 2));
+    painter.setPen(QPen(Qt::white, 3));
 
     for (size_t i = 0; i < maze.getRows(); ++i) {
         for (size_t j = 0; j < maze.getColumns(); ++j) {
@@ -72,8 +71,8 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
     drawable_label->setPixmap(pix);
 }
 
-auto MazeUi::changeBackground(QString fileName, const MazeGenerator& maze) -> void {
-    image.set(fileName);
+auto MazeUi::changeBackground(QString filePath, const MazeGenerator& maze) -> void {
+    image.set(filePath);
     create(maze);
 }
 

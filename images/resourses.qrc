@@ -2,5 +2,6 @@
     <qresource prefix="/style">
         <file>stylesheet.qss</file>
         <file>restart.svg</file>
+        <file>background-preset/checked_dark_blue.jpg</file>
     </qresource>
 </RCC>
