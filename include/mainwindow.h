@@ -3,8 +3,6 @@
 #include <QMainWindow>
 
 #include "maze_ui.h"
-#include "../maze/maze.h"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

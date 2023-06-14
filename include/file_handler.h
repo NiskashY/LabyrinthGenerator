@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../custom_aliases.h"
+#include "custom_aliases.h"
 
 #include <QString>
 
@@ -8,12 +8,10 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <vector>
 
 namespace file {
 class Handler {
 public:
-
     explicit Handler(const QString&);
 
     auto read() -> matrix_t;

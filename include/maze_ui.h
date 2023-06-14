@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../maze/maze.h"
+#include "maze.h"
 
 #include <QMainWindow>
 #include <QRect>

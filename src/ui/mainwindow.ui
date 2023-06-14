@@ -47,7 +47,7 @@
           <item>
            <widget class="QPushButton" name="changeBackground">
             <property name="text">
-             <string>Change Background</string>
+             <string>IMAGE</string>
             </property>
            </widget>
           </item>

@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * Matrix file
  * in matrix can be two types of walls:
@@ -10,12 +12,9 @@
  *      if both exist  -> 0b011
 */
 
-#pragma once
-
-#include "../custom_aliases.h"
+#include "custom_aliases.h"
 
 #include <iostream>
-#include <vector>
 
 class Matrix { 
 public:
@@ -49,7 +48,5 @@ protected:    // variables
     size_t rows_count = 0;
     size_t columns_count = 0;
 };
-
-auto assignVerticalBorders() -> void;
 
 std::ostream& operator<<(std::ostream& out, const Matrix& matrix);

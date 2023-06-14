@@ -13,25 +13,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+# Include directories | compiler will search there
+set(COMMON_INCLUDE ${PROJECT_SOURCE_DIR}/include)
+include_directories(${COMMON_INCLUDE})
+
+# Define cpp files
 file(GLOB SRC_FILES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
     ${PROJECT_SOURCE_DIR}/src/maze/*.cpp
     ${PROJECT_SOURCE_DIR}/src/ui/*.cpp
 )
 
+# Define .h files for QtCreator
 file(GLOB HDR_FILES
-    ${PROJECT_SOURCE_DIR}/src/*.h
-    ${PROJECT_SOURCE_DIR}/src/maze/*.h
-    ${PROJECT_SOURCE_DIR}/src/ui/*.h
+    ${COMMON_INCLUDE}/*.h
 )
 
+# Define .ui files for QtCreator
 file(GLOB UI_FILES
     ${PROJECT_SOURCE_DIR}/src/*.ui
     ${PROJECT_SOURCE_DIR}/src/maze/*.ui
     ${PROJECT_SOURCE_DIR}/src/ui/*.ui
 )
 
-
+# Define all the files to be linked 
 set(PROJECT_SOURCES
     ${SRC_FILES}
     ${HDR_FILES}
@@ -41,6 +46,7 @@ set(PROJECT_SOURCES
     images/stylesheet.qss
 )
 
+# Qt connection stuff 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(LabyrinthGenerator
         MANUAL_FINALIZATION
