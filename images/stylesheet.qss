@@ -20,7 +20,7 @@ QPushButton
 	background-color: #4891b4;
 	color: #fff;
 	min-width: 80px;
-	border-radius: 4px;
+	border-radius: 0px;
 	padding: 5px;
 
 }

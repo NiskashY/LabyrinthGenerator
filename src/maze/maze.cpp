@@ -1,4 +1,6 @@
 #include "maze.h"
+
+#include <queue>
 #include <random>
 
 namespace {
@@ -10,55 +12,98 @@ namespace {
     }
 }
 
-MazeGenerator::MazeGenerator(size_t rows_, size_t columns_) {
+Maze::Maze(size_t rows_, size_t columns_) {
     resize(rows_, columns_);
 }
 
-auto MazeGenerator::create(size_t rows, size_t columns) -> void {
+auto Maze::create(size_t rows, size_t columns) -> void {
     resize(rows, columns);
     generate();
 }
 
-auto MazeGenerator::show() const -> void {
+auto Maze::show() const -> void {
     walls.show();
 }
 
-auto MazeGenerator::resize(size_t rows_, size_t columns_, int val) -> void {
+auto Maze::resize(size_t rows_, size_t columns_, int val) -> void {
     rows = rows_; columns = columns_;
     walls.resize(rows, columns, val);
 }
 
-auto MazeGenerator::getRows() const -> size_t {
+auto Maze::getRows() const -> size_t {
     return rows;
 }
 
-auto MazeGenerator::getColumns() const -> size_t {
+auto Maze::getColumns() const -> size_t {
     return columns;
 }
 
-auto MazeGenerator::getData() const -> matrix_t {
+auto Maze::getData() const -> matrix_t {
     return walls.getData();
 }
 
-auto MazeGenerator::getRefData() const -> const matrix_t& {
+auto Maze::getRefData() const -> const matrix_t& {
     return walls.getRefData();
 }
 
-auto MazeGenerator::setData(const matrix_t& data) -> void {
+auto Maze::setData(const matrix_t& data) -> void {
     walls.setData(data);
     rows = walls.getRows();
     columns = walls.getColumns();
 }
 
-auto MazeGenerator::isHorizontalWall(size_t x, size_t y) const -> bool {
+auto Maze::isHorizontalWall(size_t x, size_t y) const -> bool {
     return walls.isHorizontalWallExist(x, y);
 }
 
-auto MazeGenerator::isVerticallWall(size_t x, size_t y) const -> bool {
+auto Maze::isVerticallWall(size_t x, size_t y) const -> bool {
     return walls.isVerticalWallExist(x, y);
 }
 
-auto MazeGenerator::generate() -> void {
+
+auto Maze::isSeparatedByWall(QPoint cur, QPoint nxt) const -> bool {
+    switch(determine_turn(cur, nxt)) {
+        case Turn::RIGHT:   return isVerticallWall(cur.x(), cur.y());
+        case Turn::LEFT:    return isVerticallWall(nxt.x(), nxt.y());
+        case Turn::UP:      return isHorizontalWall(nxt.x(), nxt.y());
+        case Turn::DOWN:    return isHorizontalWall(cur.x(), cur.y());
+        default: return false;
+    }
+}
+
+auto Maze::findPath(QPoint src, QPoint dest) const -> Matrix {
+    std::vector<int> row = {-1, 1, 0, 0};
+    std::vector<int> col = {0, 0, -1, 1};
+
+    Matrix ret{getRows(), getColumns(), Turn::NONE};
+
+    std::queue<QPoint> q;
+    q.push(src);
+    ret.set(src.x(), src.y(), Turn::START);
+
+    int x = 0;
+    while (!q.empty() && ++x < 200) {
+        auto point = q.front(); q.pop();
+
+        for (int i = 0; i < (int)row.size(); ++i) {
+            QPoint nxt{point.x() + row[i], point.y() + col[i]};
+
+            if (ret.isBordersCorrect(nxt) &&
+                ret.get(nxt.x(), nxt.y()) == Turn::NONE &&
+                !isSeparatedByWall(point, nxt)) {
+                q.push(nxt);
+                ret.set(nxt.x(), nxt.y(), determine_turn(nxt, point));
+                if (nxt == dest) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+auto Maze::generate() -> void {
     fillEmptyCells();
     for (int i = 0; i + 1 < rows; ++i) {
         assignUniqueSets();
@@ -69,25 +114,25 @@ auto MazeGenerator::generate() -> void {
     addLastRow();
 }
 
-auto MazeGenerator::getRoot(int v) -> int {
+auto Maze::getRoot(int v) -> int {
     if (parent.contains(v) && parent[v] != v) {
         return parent[v] = getRoot(parent[v]);
     }
     return v;
 }
 
-auto MazeGenerator::mergeSets(int x, int y) -> void {
+auto Maze::mergeSets(int x, int y) -> void {
     parent[y] = getRoot(x);
 }
 
-auto MazeGenerator::fillEmptyCells() -> void {
+auto Maze::fillEmptyCells() -> void {
     this->resize(rows, columns);
     set_counter = 1;
     line.assign(columns, kEmptyCell);
     parent.clear();
 }
 
-auto MazeGenerator::assignUniqueSets() -> void {
+auto Maze::assignUniqueSets() -> void {
     parent.clear();
     for (int i = 0; i < columns; ++i) {
         if (line[i] == kEmptyCell) {
@@ -97,7 +142,7 @@ auto MazeGenerator::assignUniqueSets() -> void {
     }
 }
 
-auto MazeGenerator::createVerticalWalls(int row) -> void {
+auto Maze::createVerticalWalls(int row) -> void {
     // if two near sets are identical or if random choice is true -> create wall on the right
     // else -> unite sets
 
@@ -115,7 +160,7 @@ auto MazeGenerator::createVerticalWalls(int row) -> void {
     }
 }
 
-auto MazeGenerator::createHorizontalWalls(int row) -> void {
+auto Maze::createHorizontalWalls(int row) -> void {
     // random choice to put wall or not
     // if every cell in current set with bottom wall ->
     // -> randomly choose to remove bottom wall
@@ -144,7 +189,7 @@ auto MazeGenerator::createHorizontalWalls(int row) -> void {
     }
 }
 
-auto MazeGenerator::prepareNewLine(int row) -> void {
+auto Maze::prepareNewLine(int row) -> void {
     for (int i = 0; i < columns; ++i) {
         if (walls.isHorizontalWallExist(row, i)) {
             line[i] = kEmptyCell;
@@ -152,7 +197,7 @@ auto MazeGenerator::prepareNewLine(int row) -> void {
     }
 }
 
-auto MazeGenerator::addLastRow() -> void {
+auto Maze::addLastRow() -> void {
     // if set[i] != set[i + 1] && vertical wall is set
     // than i need to remove current right border
 

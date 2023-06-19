@@ -1,7 +1,7 @@
 #include "matrix.h"
 
-Matrix::Matrix(size_t cnt_rows, size_t cnt_columns) {
-    this->resize(cnt_rows, cnt_columns);
+Matrix::Matrix(size_t cnt_rows, size_t cnt_columns, matrix_data_t val) {
+    this->resize(cnt_rows, cnt_columns, val);
 }
 
 auto Matrix::resize(size_t cnt_rows, size_t cnt_columns, int val) -> void{
@@ -9,6 +9,14 @@ auto Matrix::resize(size_t cnt_rows, size_t cnt_columns, int val) -> void{
    columns_count = cnt_columns;
    walls.clear();
    walls.resize(rows_count, matrix_row_t(columns_count, val));
+}
+
+auto Matrix::set(size_t x, size_t y, matrix_data_t val) -> void {
+   walls[x][y] = val;
+}
+
+auto Matrix::get(size_t x, size_t y) const -> matrix_data_t {
+   return walls[x][y];
 }
 
 auto Matrix::setData(matrix_t data) -> void {
@@ -62,6 +70,11 @@ auto Matrix::isHorizontalWallExist(size_t x, size_t y) const -> bool {
 auto Matrix::isBordersCorrect(size_t x, size_t y) const -> bool {
     return x < rows_count && y < columns_count;
 }
+
+auto Matrix::isBordersCorrect(QPoint p) const -> bool {
+    return isBordersCorrect(p.x(), p.y());
+}
+
 
 auto Matrix::show() const -> void {
     for (auto& row : walls) {

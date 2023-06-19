@@ -29,5 +29,5 @@ private:
 private:
     Ui::MainWindow *ui;
     MazeUi mazeUi;
-    MazeGenerator maze;
+    Maze maze;
 };

@@ -27,17 +27,17 @@ class MazeUi {
 public:
     MazeUi(Ui::MainWindow* ui_);
 
-    auto create(const MazeGenerator&) -> void;
-    auto draw(const MazeGenerator&, QLabel*) -> void;
+    auto create(const Maze&) -> void;
+    auto draw(const Maze&, QLabel*) -> void;
     auto clear() -> void;
-    auto changeBackground(QString, const MazeGenerator&) -> void;
-    auto resetBackground(const MazeGenerator&) -> void;
+    auto changeBackground(QString, const Maze&) -> void;
+    auto resetBackground(const Maze&) -> void;
 
-    auto open(QString, MazeGenerator&) -> void;
-    auto save(const MazeGenerator&, QLabel*) -> QString;
+    auto open(QString, Maze&) -> void;
+    auto save(const Maze&, QLabel*) -> QString;
 
 private: // funcitons
-    auto saveMazeData(const MazeGenerator&, QString) -> void;
+    auto saveMazeData(const Maze&, QString) -> void;
     auto saveMazeImage(const QPixmap&, QString) -> void;
     auto getMazeFieldPixmap(QLabel*) -> QPixmap;
 

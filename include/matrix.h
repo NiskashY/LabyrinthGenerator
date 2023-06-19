@@ -12,19 +12,22 @@
  *      if both exist  -> 0b011
 */
 
-#include "custom_aliases.h"
+#include "helpers.h"
 
+#include <QPoint>
 #include <iostream>
 
 class Matrix { 
 public:
     Matrix() = default;
 
-    explicit Matrix(size_t, size_t);
+    Matrix(size_t, size_t, matrix_data_t = 0);
 
     auto show() const -> void;
     auto resize(size_t, size_t, int = 0) -> void;
 
+    auto set(size_t, size_t, matrix_data_t) -> void;
+    auto get(size_t, size_t) const -> matrix_data_t;
     auto setData(matrix_t) -> void;
     auto getData() const -> matrix_t;
     auto getRefData() const -> const matrix_t&;
@@ -40,8 +43,8 @@ public:
     auto isVerticalWallExist(size_t, size_t) const -> bool;
     auto isHorizontalWallExist(size_t, size_t) const -> bool;
 
-private:      // functions
     auto isBordersCorrect(size_t, size_t) const -> bool;
+    auto isBordersCorrect(QPoint) const -> bool;
 
 protected:    // variables
     matrix_t walls;

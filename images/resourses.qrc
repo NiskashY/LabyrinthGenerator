@@ -3,5 +3,6 @@
         <file>stylesheet.qss</file>
         <file>restart.svg</file>
         <file>background-preset/checked_dark_blue.jpg</file>
+        <file>background-preset/checked_red.jpg</file>
     </qresource>
 </RCC>

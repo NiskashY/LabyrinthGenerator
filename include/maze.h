@@ -3,13 +3,14 @@
 #include <unordered_map>
 
 #include "matrix.h"
+#include "helpers.h"
 
-class MazeGenerator {
+class Maze {
 public:
 
-    MazeGenerator() = default;
+    Maze() = default;
 
-    explicit MazeGenerator(size_t, size_t);
+    explicit Maze(size_t, size_t);
 
     auto generate() -> void;
     auto show() const -> void;
@@ -24,6 +25,9 @@ public:
 
     auto isHorizontalWall(size_t x, size_t y) const -> bool;
     auto isVerticallWall(size_t x, size_t y) const -> bool;
+
+    auto findPath(QPoint, QPoint) const -> Matrix;
+    auto isSeparatedByWall(QPoint, QPoint) const -> bool;
 
 private: // functions
     auto addLastRow()               -> void;

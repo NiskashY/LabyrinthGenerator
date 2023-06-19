@@ -1,6 +1,7 @@
 #include "maze_ui.h"
 #include "file_handler.h"
 #include "ui/ui_mainwindow.h"
+#include "find_path.h"
 
 #include <QDir>
 
@@ -24,7 +25,7 @@ MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {
 
 }
 
-auto MazeUi::create(const MazeGenerator& maze) -> void {
+auto MazeUi::create(const Maze& maze) -> void {
     clear();
     auto field = new QLabel();
     field->setObjectName("drawable_label");
@@ -41,7 +42,7 @@ auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
     return pix.scaled(drawable_label->rect().size());
 }
 
-auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
+auto MazeUi::draw(const Maze& maze, QLabel* drawable_label) -> void {
     const auto cellHeight = (double)drawable_label->rect().height() / maze.getRows();
     const auto cellWidth  = (double)drawable_label->rect().width()  / maze.getColumns();
 
@@ -68,15 +69,16 @@ auto MazeUi::draw(const MazeGenerator& maze, QLabel* drawable_label) -> void {
         }
     }
 
-    drawable_label->setPixmap(pix);
+    auto ret = printed::find_path(pix, maze, {0, 0}, {120, 120});
+    drawable_label->setPixmap(ret);
 }
 
-auto MazeUi::changeBackground(QString filePath, const MazeGenerator& maze) -> void {
+auto MazeUi::changeBackground(QString filePath, const Maze& maze) -> void {
     image.set(filePath);
     create(maze);
 }
 
-auto MazeUi::resetBackground(const MazeGenerator& maze) -> void {
+auto MazeUi::resetBackground(const Maze& maze) -> void {
     image.reset();
     create(maze);
 }
@@ -89,12 +91,12 @@ void MazeUi::clear() {
     }
 }
 
-auto MazeUi::open(QString file_path, MazeGenerator& maze) -> void {
+auto MazeUi::open(QString file_path, Maze& maze) -> void {
     file::Handler fhandler(file_path);
     maze.setData(fhandler.read());
 }
 
-auto MazeUi::save(const MazeGenerator& maze, QLabel* label) -> QString {
+auto MazeUi::save(const Maze& maze, QLabel* label) -> QString {
     auto name = file::createFileName();
 
     QDir qdir;
@@ -111,7 +113,7 @@ auto MazeUi::save(const MazeGenerator& maze, QLabel* label) -> QString {
     return dir_path;
 }
 
-auto MazeUi::saveMazeData(const MazeGenerator& maze, QString file_path) -> void {
+auto MazeUi::saveMazeData(const Maze& maze, QString file_path) -> void {
     file::Handler fhandler(file_path);
     fhandler.write(maze.getRefData());
 }
