@@ -19,20 +19,7 @@
      <layout class="QHBoxLayout" name="mazeLayout"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="buttonsLayout" stretch="2,1,2,2">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
+     <layout class="QHBoxLayout" name="buttonsLayout" stretch="2,0,2">
       <item>
        <layout class="QVBoxLayout" name="openSaveLayout">
         <item>
@@ -47,7 +34,7 @@
           <item>
            <widget class="QPushButton" name="changeBackground">
             <property name="text">
-             <string>IMAGE</string>
+             <string>BACKGROUND</string>
             </property>
            </widget>
           </item>
@@ -82,6 +69,19 @@
        </layout>
       </item>
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <layout class="QVBoxLayout" name="generateLayout">
         <item>
          <layout class="QHBoxLayout" name="heightLayout">
@@ -113,19 +113,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>

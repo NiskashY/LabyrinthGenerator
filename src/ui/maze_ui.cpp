@@ -3,6 +3,7 @@
 #include "ui/ui_mainwindow.h"
 #include "find_path.h"
 
+#include <clickable_label.h>
 #include <QDir>
 
 namespace file {
@@ -21,13 +22,15 @@ auto ImageSelector::reset() -> void {
     }
 }
 
-MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {
-
-}
+MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {}
 
 auto MazeUi::create(const Maze& maze) -> void {
     clear();
-    auto field = new QLabel();
+    auto field = new ClickableLabel();
+    QObject::connect(
+        field, &ClickableLabel::mousePressed,
+        this, [&](QPoint p) {MazeUi::drawLineBetweenPoints(maze, p);}
+    );
     field->setObjectName("drawable_label");
     field->setProperty("field", "maze");
     field->setScaledContents(true);
@@ -40,6 +43,19 @@ auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
     QPixmap pix(drawable_label->rect().size());
     pix.load(image.fileName);
     return pix.scaled(drawable_label->rect().size());
+}
+
+auto MazeUi::drawLineBetweenPoints(const Maze& maze, QPoint p) -> void{
+    static QPoint prev{-1, -1};
+
+    if (prev != QPoint{-1, -1}) {
+        auto label = dynamic_cast<QLabel*>(sender());
+        auto ret = printed::find_path(label->pixmap(), maze, prev, p);
+        label->setPixmap(ret);
+        prev = {-1, -1};
+    } else {
+        prev = p;
+    }
 }
 
 auto MazeUi::draw(const Maze& maze, QLabel* drawable_label) -> void {
@@ -69,8 +85,7 @@ auto MazeUi::draw(const Maze& maze, QLabel* drawable_label) -> void {
         }
     }
 
-    auto ret = printed::find_path(pix, maze, {0, 0}, {120, 120});
-    drawable_label->setPixmap(ret);
+    drawable_label->setPixmap(pix);
 }
 
 auto MazeUi::changeBackground(QString filePath, const Maze& maze) -> void {

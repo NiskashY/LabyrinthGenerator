@@ -23,7 +23,9 @@ struct ImageSelector {
     auto reset() -> void;
 };
 
-class MazeUi {
+class MazeUi : public QObject {
+    Q_OBJECT
+
 public:
     MazeUi(Ui::MainWindow* ui_);
 
@@ -40,6 +42,9 @@ private: // funcitons
     auto saveMazeData(const Maze&, QString) -> void;
     auto saveMazeImage(const QPixmap&, QString) -> void;
     auto getMazeFieldPixmap(QLabel*) -> QPixmap;
+
+private slots:
+    auto drawLineBetweenPoints(const Maze& maze, QPoint) -> void;
 
 private:
     Ui::MainWindow* ui = nullptr;
