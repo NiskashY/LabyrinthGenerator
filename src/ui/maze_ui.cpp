@@ -53,11 +53,8 @@ auto MazeUi::drawLineBetweenPoints(const Maze& maze, QPointF p) -> void{
 
     auto label = dynamic_cast<QLabel*>(sender());
 
-    std::cout << "-----------\n" << label->pixmap().size().height() << ' ' << label->pixmap().size().width() << std::endl;
-    std::cout << p.x() << ' ' << p.y() << std::endl;
     p.setX(p.x() * label->pixmap().width() / label->width());
     p.setY(p.y() * label->pixmap().height() / label->height());
-    std::cout << p.x() << ' ' << p.y() << std::endl;
 
     p = {p.y(), p.x()};
     if (prev.x() >= 0 && prev.y() >= 0) {

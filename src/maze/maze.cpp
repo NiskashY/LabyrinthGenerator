@@ -81,8 +81,7 @@ auto Maze::findPath(QPoint src, QPoint dest) const -> Matrix {
     q.push(src);
     ret.set(src.x(), src.y(), Turn::START);
 
-    int x = 0;
-    while (!q.empty() && ++x < 200) {
+    while (!q.empty()) {
         auto point = q.front(); q.pop();
 
         for (int i = 0; i < (int)row.size(); ++i) {
