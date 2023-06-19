@@ -27,9 +27,12 @@ MazeUi::MazeUi(Ui::MainWindow* ui_) : ui(ui_) {}
 auto MazeUi::create(const Maze& maze) -> void {
     clear();
     auto field = new ClickableLabel();
+
     QObject::connect(
         field, &ClickableLabel::mousePressed,
-        this, [&](QPoint p) {MazeUi::drawLineBetweenPoints(maze, p);}
+        this, [&](QPointF p) {
+            MazeUi::drawLineBetweenPoints(maze, p);
+        }
     );
     field->setObjectName("drawable_label");
     field->setProperty("field", "maze");
@@ -45,11 +48,19 @@ auto MazeUi::getMazeFieldPixmap(QLabel* drawable_label) -> QPixmap {
     return pix.scaled(drawable_label->rect().size());
 }
 
-auto MazeUi::drawLineBetweenPoints(const Maze& maze, QPoint p) -> void{
-    static QPoint prev{-1, -1};
+auto MazeUi::drawLineBetweenPoints(const Maze& maze, QPointF p) -> void{
+    static QPointF prev{-1, -1};
 
-    if (prev != QPoint{-1, -1}) {
-        auto label = dynamic_cast<QLabel*>(sender());
+    auto label = dynamic_cast<QLabel*>(sender());
+
+    std::cout << "-----------\n" << label->pixmap().size().height() << ' ' << label->pixmap().size().width() << std::endl;
+    std::cout << p.x() << ' ' << p.y() << std::endl;
+    p.setX(p.x() * label->pixmap().width() / label->width());
+    p.setY(p.y() * label->pixmap().height() / label->height());
+    std::cout << p.x() << ' ' << p.y() << std::endl;
+
+    p = {p.y(), p.x()};
+    if (prev.x() >= 0 && prev.y() >= 0) {
         auto ret = printed::find_path(label->pixmap(), maze, prev, p);
         label->setPixmap(ret);
         prev = {-1, -1};

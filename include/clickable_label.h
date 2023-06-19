@@ -8,11 +8,11 @@ class ClickableLabel : public QLabel
 {
     Q_OBJECT
 signals:
-    void mousePressed( const QPoint& );
+    void mousePressed( const QPointF& );
 
 public:
     ClickableLabel( QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-    ClickableLabel( const QString& text, QWidget* parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
-    void mousePressEvent( QMouseEvent* ev );
+protected:
+    void mousePressEvent(QMouseEvent* ev) override;
 };

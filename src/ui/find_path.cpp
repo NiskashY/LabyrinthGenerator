@@ -5,7 +5,7 @@
 QPoint normalise(QPixmap pix, const Maze& maze, QPointF p) {
     auto cell_h = pix.height() / maze.getRows();
     auto cell_w = pix.width() / maze.getColumns();
-    return {int(p.y() / cell_w), int(p.x() / cell_h)};
+    return {int(p.x() / cell_h), int(p.y() / cell_w)};
 }
 
 QPointF extend(QPixmap pix, const Maze& maze, QPoint p) {

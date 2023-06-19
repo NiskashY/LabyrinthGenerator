@@ -44,7 +44,7 @@ private: // funcitons
     auto getMazeFieldPixmap(QLabel*) -> QPixmap;
 
 private slots:
-    auto drawLineBetweenPoints(const Maze& maze, QPoint) -> void;
+    auto drawLineBetweenPoints(const Maze& maze, QPointF) -> void;
 
 private:
     Ui::MainWindow* ui = nullptr;
